@@ -1,0 +1,52 @@
+# Production-style stack: the backend switches from SQLite to Postgres
+# automatically once DATABASE_URL is set (see backend/src/db/index.js) —
+# no code changes needed to run it this way.
+#
+# Usage: copy .env.example to .env at the repo root, fill in the values,
+# then `docker compose up -d --build`.
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "${BACKEND_PORT:-4000}:4000"
+    environment:
+      PORT: 4000
+      DATABASE_URL: postgres://aligo:${POSTGRES_PASSWORD}@postgres:5432/aligo
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-30d}
+      OTP_TTL_MINUTES: ${OTP_TTL_MINUTES:-5}
+      GMAIL_USER: ${GMAIL_USER}
+      GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      MAPBOX_ACCESS_TOKEN: ${MAPBOX_ACCESS_TOKEN}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_MINIAPP_URL: ${TELEGRAM_MINIAPP_URL}
+      # Uncomment the volume mount below once you have a real key file,
+      # and set this to match its mounted path.
+      # FIREBASE_SERVICE_ACCOUNT_PATH: /run/secrets/firebase-service-account.json
+    # volumes:
+    #   - ./backend/firebase-service-account.json:/run/secrets/firebase-service-account.json:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: aligo
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: aligo
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aligo"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

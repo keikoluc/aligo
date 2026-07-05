@@ -1,0 +1,231 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Aligo",
+
+  "couldNotReachServer": "Could not reach the Aligo server. Check your connection.",
+  "somethingWentWrong": "Something went wrong.",
+  "cancel": "Cancel",
+  "submit": "Submit",
+
+  "languagePickerTitle": "Choose your language",
+  "languagePickerSubtitle": "You can change this later from the menu.",
+  "continueButton": "Continue",
+  "languageUzbek": "O'zbekcha",
+  "languageRussian": "Русский",
+  "languageEnglish": "English",
+
+  "loginWelcomeTitle": "Welcome back to Aligo",
+  "loginWelcomeSubtitle": "We'll email you a one-time code to sign in\nand track your cargo in real time.",
+  "emailAddressLabel": "Email address",
+  "emailAddressHint": "you@example.com",
+  "continueWithEmail": "Continue with email",
+  "orContinueWith": "or continue with",
+  "google": "Google",
+  "apple": "Apple",
+  "noAccountPrompt": "Don't have an account? ",
+  "createOne": "Create one",
+  "invalidEmail": "Enter a valid email address",
+  "googleSignInFailed": "Google sign-in failed: {error}",
+  "@googleSignInFailed": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "createAccountTitle": "Create your account",
+  "joinAligo": "Join Aligo",
+  "signupSubtitle": "We'll email you a verification code to confirm it's you.",
+  "fullNameLabel": "Full name",
+  "fullNameHint": "Jasur Karimov",
+  "enterFullName": "Enter your full name",
+  "sendVerificationCode": "Send verification code",
+
+  "verifyEmailTitle": "Verify your email",
+  "enterCodeTitle": "Enter the code we sent",
+  "otpSentTo": "We emailed a 6-digit verification code to {email}.",
+  "@otpSentTo": {
+    "placeholders": { "email": { "type": "String" } }
+  },
+  "enterSixDigitCode": "Enter the 6-digit code from your email",
+  "verifyAndContinue": "Verify & continue",
+  "sending": "Sending...",
+  "resendPrompt": "Didn't get a code? Resend",
+  "newCodeSent": "A new code has been sent.",
+
+  "roleSelectTitle": "How will you use Aligo?",
+  "roleSelectSubtitle": "Choose the option that fits you — you'll set up the matching details next.",
+  "driverRoleTitle": "I drive cargo",
+  "driverRoleSubtitle": "Register your vehicle and receive matching cargo requests.",
+  "shipperRoleTitle": "I send cargo",
+  "shipperRoleSubtitle": "Post shipments and find a driver nearby.",
+
+  "driverProfileTitle": "Driver profile",
+  "shipperProfileTitle": "Shipper profile",
+  "tellUsAboutYourself": "Tell us about yourself",
+  "phoneNumberLabel": "Phone number",
+  "enterPhoneNumber": "Enter your phone number",
+  "homeAddressLabel": "Home address",
+  "enterAddress": "Enter your address",
+  "ageLabel": "Age",
+  "enterValidAge": "Enter a valid age",
+  "vehicleInfo": "Vehicle info",
+  "brandModelLabel": "Brand & model",
+  "enterBrandModel": "Enter the vehicle brand/model",
+  "colorLabel": "Color",
+  "colorHintExample": "White",
+  "enterColor": "Enter the vehicle color",
+  "plateNumberLabel": "Plate number",
+  "enterPlateNumber": "Enter the plate number",
+  "sizeCapacityLabel": "Size / capacity",
+  "sizeCapacityHintExample": "Up to 3 tons",
+  "enterVehicleSize": "Enter the vehicle size",
+  "additionalAmenities": "Additional amenities",
+  "saveAndContinue": "Save and continue",
+
+  "whereToSendCargo": "Where to send your cargo?",
+  "findNearbyLoads": "Find nearby loads",
+  "premiumLogisticsAccount": "Premium logistics account",
+  "aligoCargo": "Aligo Cargo",
+  "myShipments": "My Shipments",
+  "myDeliveries": "My Deliveries",
+  "paymentsInvoices": "Payments & Invoices",
+  "support": "Support",
+  "settings": "Settings",
+  "language": "Language",
+
+  "postShipmentTitle": "Post a shipment",
+  "whatAreYouSending": "What are you sending?",
+  "cargoTypeLabel": "Cargo type",
+  "chooseCargoType": "Choose a cargo type",
+  "descriptionOptional": "Description (optional)",
+  "descriptionHint": "Extra details for the driver",
+  "pickupLocationLabel": "Pickup location",
+  "dropoffLocationLabel": "Dropoff location",
+  "tapToSearchAddress": "Tap to search an address",
+  "specialRequirements": "Special requirements (optional)",
+  "priceLabel": "Price you'll pay",
+  "priceHint": "500000",
+  "enterValidPrice": "Enter a valid price",
+  "estimatingPrice": "Calculating suggested price...",
+  "priceEstimateSummary": "{distance} km • suggested: {price} {currency}",
+  "@priceEstimateSummary": {
+    "placeholders": {
+      "distance": { "type": "String" },
+      "price": { "type": "String" },
+      "currency": { "type": "String" }
+    }
+  },
+  "currencyUzs": "UZS",
+  "postShipmentButton": "Post shipment",
+  "choosePickupDropoff": "Choose a pickup and dropoff location",
+  "searchAddressHint": "Search for an address",
+  "pickupAddressTitle": "Pickup address",
+  "dropoffAddressTitle": "Dropoff address",
+  "surchargeAmount": "+{amount} {currency}",
+  "@surchargeAmount": {
+    "placeholders": {
+      "amount": { "type": "String" },
+      "currency": { "type": "String" }
+    }
+  },
+
+  "cargoGeneral": "General cargo",
+  "cargoFurniture": "Furniture",
+  "cargoConstruction": "Construction materials",
+  "cargoPerishable": "Food / perishable",
+  "cargoEquipment": "Equipment / machinery",
+
+  "amenityRefrigerated": "Refrigerated",
+  "amenitySideRearTent": "Side/rear opening tent",
+  "amenityLift": "Lift",
+  "amenityTieDownStraps": "Tie-down straps included",
+
+  "nearbyLoadsTitle": "Nearby loads",
+  "loadAccepted": "Load accepted!",
+  "alreadyTaken": "Already taken by another driver.",
+  "noOpenLoads": "No open loads nearby right now.",
+  "kmAway": "{km} km away",
+  "@kmAway": {
+    "placeholders": { "km": { "type": "String" } }
+  },
+  "acceptButton": "Accept",
+
+  "myShipmentsTitle": "My shipments",
+  "postNewLoad": "Post new load",
+  "noShipmentsYet": "No shipments posted yet.",
+  "shipmentCancelled": "Shipment cancelled.",
+  "thanksForRating": "Thanks for rating!",
+  "rateDriverTitle": "Rate the driver",
+  "cancelShipment": "Cancel shipment",
+  "ratedDriverStars": "You rated the driver {stars}★",
+  "@ratedDriverStars": {
+    "placeholders": { "stars": { "type": "int" } }
+  },
+  "rateDriverButton": "Rate driver",
+  "driverFallback": "Driver",
+
+  "shipmentDetailsTitle": "Shipment details",
+  "editShipmentTitle": "Edit shipment",
+  "editButton": "Edit",
+  "saveChangesButton": "Save changes",
+  "shipmentUpdated": "Shipment updated.",
+  "descriptionLabel": "Description",
+  "noDescriptionProvided": "No description provided.",
+  "priceOnlyLabel": "Price",
+  "postedOnLabel": "Posted on {date}",
+  "@postedOnLabel": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "trackShipmentButton": "Track shipment",
+  "editLockedNotice": "This shipment can no longer be edited — a driver has already accepted it.",
+
+  "myDeliveriesTitle": "My deliveries",
+  "noDeliveriesYet": "No accepted deliveries yet.",
+  "locationPermissionRequired": "Location permission is required to share.",
+  "markedPickedUp": "Marked as picked up.",
+  "markedDelivered": "Marked as delivered!",
+  "deliveryReleased": "Delivery released back to the pool.",
+  "rateShipperTitle": "Rate the shipper",
+  "sharingLiveLocation": "Sharing live location",
+  "shareMyLocation": "Share my location",
+  "sharingStopsIfLeave": "Sharing stops if you leave this screen.",
+  "pickedUpCargo": "Picked up cargo",
+  "markAsDelivered": "Mark as delivered",
+  "releaseThisDelivery": "Release this delivery",
+  "ratedShipperStars": "You rated the shipper {stars}★",
+  "@ratedShipperStars": {
+    "placeholders": { "stars": { "type": "int" } }
+  },
+  "rateShipperButton": "Rate shipper",
+  "shipperFallback": "Shipper",
+
+  "waitingForDriverLocation": "Waiting for driver's location...",
+  "driverLastSeen": "Driver last seen {seconds}s ago",
+  "@driverLastSeen": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "driverLabel": "Driver",
+
+  "statusOpen": "Open",
+  "statusAccepted": "Accepted",
+  "statusInTransit": "In transit",
+  "statusCompleted": "Completed",
+  "statusCancelled": "Cancelled",
+
+  "commentOptional": "Comment (optional)",
+
+  "telegramTitle": "Telegram",
+  "telegramIntro": "Connect our Telegram bot to get instant notifications when your shipments change status, and to manage loads right from Telegram.",
+  "telegramLinked": "✅ Telegram is connected",
+  "telegramNotLinked": "Telegram is not connected yet",
+  "telegramConnectButton": "Connect Telegram",
+  "telegramUnlinkButton": "Disconnect",
+  "telegramOpenBotButton": "Open the bot",
+  "telegramCodeInstructions": "Or send this code to the bot manually:",
+  "telegramCodeExpiry": "This code expires in {minutes} minutes.",
+  "@telegramCodeExpiry": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "telegramUnlinkedMessage": "Telegram disconnected.",
+  "telegramCouldNotOpenBot": "Could not open the bot. Send the code manually instead.",
+  "telegramBotNotConfigured": "The Telegram bot isn't set up yet — ask the team to add a bot token."
+}

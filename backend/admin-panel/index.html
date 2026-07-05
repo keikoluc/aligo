@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aligo Admin</title>
+<style>
+  :root {
+    --surface-1: #fcfcfb;
+    --page: #f9f9f7;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --muted: #898781;
+    --gridline: #e1e0d9;
+    --border: rgba(11, 11, 11, 0.10);
+    --good: #0ca30c;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+    --accent: #2a78d6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --muted: #898781;
+      --gridline: #2c2c2a;
+      --border: rgba(255, 255, 255, 0.10);
+      --good: #0ca30c;
+      --warning: #fab219;
+      --serious: #ec835a;
+      --critical: #d03b3b;
+      --accent: #3987e5;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page);
+    color: var(--text-primary);
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 20px 64px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .subtitle { color: var(--text-secondary); font-size: 13px; margin: 0 0 24px; }
+
+  /* Login */
+  #login-view {
+    max-width: 360px;
+    margin: 15vh auto 0;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  #login-view h1 { font-size: 18px; }
+  input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--page);
+    color: var(--text-primary);
+    font-size: 14px;
+    margin: 12px 0;
+  }
+  button {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    cursor: pointer;
+    background: var(--accent);
+    color: #fff;
+  }
+  button.secondary {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+  button:disabled { opacity: 0.5; cursor: default; }
+  #login-error { color: var(--critical); font-size: 13px; min-height: 18px; }
+
+  /* Dashboard */
+  #dashboard-view { display: none; }
+  .topbar { display: flex; justify-content: space-between; align-items: flex-start; }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin: 20px 0 32px;
+  }
+  .stat-tile {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .stat-tile .label { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; }
+  .stat-tile .value { font-size: 28px; font-weight: 600; }
+
+  section { margin-bottom: 32px; }
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .section-head h2 { font-size: 15px; margin: 0; }
+
+  select, input[type="search"] {
+    font-family: inherit;
+    font-size: 13px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface-1);
+    color: var(--text-primary);
+  }
+
+  table { width: 100%; border-collapse: collapse; background: var(--surface-1); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+  th, td { text-align: left; padding: 10px 12px; font-size: 13px; border-bottom: 1px solid var(--gridline); }
+  th { color: var(--muted); font-weight: 500; font-size: 12px; }
+  tr:last-child td { border-bottom: none; }
+  td.num { font-variant-numeric: tabular-nums; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+  .badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .badge-open { color: var(--warning); background: color-mix(in srgb, var(--warning) 16%, transparent); }
+  .badge-accepted, .badge-in_transit { color: var(--text-secondary); background: color-mix(in srgb, var(--text-secondary) 14%, transparent); }
+  .badge-completed { color: var(--good); background: color-mix(in srgb, var(--good) 16%, transparent); }
+  .badge-cancelled { color: var(--critical); background: color-mix(in srgb, var(--critical) 16%, transparent); }
+
+  .empty { color: var(--muted); font-size: 13px; padding: 16px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="login-view">
+    <h1>Aligo Admin</h1>
+    <p class="subtitle">Sign in with the admin password.</p>
+    <input type="password" id="password-input" placeholder="Password" autofocus />
+    <div id="login-error"></div>
+    <button id="login-btn">Sign in</button>
+  </div>
+
+  <div id="dashboard-view">
+    <div class="topbar">
+      <div>
+        <h1>Aligo Admin</h1>
+        <p class="subtitle">Users, shipments, and moderation.</p>
+      </div>
+      <button class="secondary" id="logout-btn">Sign out</button>
+    </div>
+
+    <div class="stat-row" id="stat-row"></div>
+
+    <section>
+      <div class="section-head">
+        <h2>Users</h2>
+        <input type="search" id="user-search" placeholder="Search name or email" />
+      </div>
+      <div id="users-table"></div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Shipments</h2>
+        <select id="status-filter">
+          <option value="">All statuses</option>
+          <option value="open">Open</option>
+          <option value="accepted">Accepted</option>
+          <option value="in_transit">In transit</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+      <div id="listings-table"></div>
+    </section>
+  </div>
+</div>
+
+<script>
+const API = '';
+let token = sessionStorage.getItem('aligo_admin_token');
+
+const loginView = document.getElementById('login-view');
+const dashboardView = document.getElementById('dashboard-view');
+
+function showDashboard() {
+  loginView.style.display = 'none';
+  dashboardView.style.display = 'block';
+  loadStats();
+  loadUsers();
+  loadListings();
+}
+
+async function api(path, options = {}) {
+  const res = await fetch(`${API}/api/admin${path}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(options.headers || {}),
+    },
+  });
+  if (res.status === 401) {
+    sessionStorage.removeItem('aligo_admin_token');
+    token = null;
+    loginView.style.display = 'block';
+    dashboardView.style.display = 'none';
+    throw new Error('Session expired');
+  }
+  const body = await res.json();
+  if (!res.ok) throw new Error(body.error || 'Request failed');
+  return body;
+}
+
+document.getElementById('login-btn').addEventListener('click', async () => {
+  const password = document.getElementById('password-input').value;
+  const errorEl = document.getElementById('login-error');
+  errorEl.textContent = '';
+  try {
+    const res = await fetch(`${API}/api/admin/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    });
+    const body = await res.json();
+    if (!res.ok) throw new Error(body.error || 'Login failed');
+    token = body.token;
+    sessionStorage.setItem('aligo_admin_token', token);
+    showDashboard();
+  } catch (err) {
+    errorEl.textContent = err.message;
+  }
+});
+
+document.getElementById('logout-btn').addEventListener('click', () => {
+  sessionStorage.removeItem('aligo_admin_token');
+  token = null;
+  loginView.style.display = 'block';
+  dashboardView.style.display = 'none';
+});
+
+function compactNumber(n) {
+  if (n == null) return '—';
+  return new Intl.NumberFormat('en-US', { notation: 'compact' }).format(n);
+}
+
+async function loadStats() {
+  const stats = await api('/stats');
+  const roleLabels = { shipper: 'Shippers', driver: 'Drivers', unassigned: 'No role yet' };
+  const statusLabels = { open: 'Open', accepted: 'Accepted', in_transit: 'In transit', completed: 'Completed', cancelled: 'Cancelled' };
+
+  const tiles = [];
+  for (const [role, count] of Object.entries(stats.usersByRole)) {
+    tiles.push({ label: roleLabels[role] || role, value: count });
+  }
+  for (const [status, count] of Object.entries(stats.listingsByStatus)) {
+    tiles.push({ label: statusLabels[status] || status, value: count });
+  }
+  tiles.push({
+    label: 'Avg rating',
+    value: stats.avgRating != null ? `${Number(stats.avgRating).toFixed(1)}★` : '—',
+  });
+  tiles.push({ label: 'Total ratings', value: stats.totalRatings });
+
+  document.getElementById('stat-row').innerHTML = tiles
+    .map((t) => `<div class="stat-tile"><div class="label">${t.label}</div><div class="value">${compactNumber(t.value)}</div></div>`)
+    .join('');
+}
+
+function statusBadge(status) {
+  const labels = { open: 'Open', accepted: 'Accepted', in_transit: 'In transit', completed: 'Completed', cancelled: 'Cancelled' };
+  return `<span class="badge badge-${status}">${labels[status] || status}</span>`;
+}
+
+async function loadUsers(search) {
+  const query = search ? `?search=${encodeURIComponent(search)}` : '';
+  const { users } = await api(`/users${query}`);
+  const container = document.getElementById('users-table');
+  if (users.length === 0) {
+    container.innerHTML = '<div class="empty">No users found.</div>';
+    return;
+  }
+  container.innerHTML = `
+    <table>
+      <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Phone</th><th>Verified</th></tr></thead>
+      <tbody>
+        ${users
+          .map(
+            (u) => `<tr>
+              <td class="num">${u.id}</td>
+              <td>${u.full_name || '—'}</td>
+              <td>${u.email}</td>
+              <td>${u.role || '—'}</td>
+              <td>${u.phone || '—'}</td>
+              <td>${u.is_verified ? 'Yes' : 'No'}</td>
+            </tr>`
+          )
+          .join('')}
+      </tbody>
+    </table>`;
+}
+
+async function loadListings(status) {
+  const query = status ? `?status=${encodeURIComponent(status)}` : '';
+  const { listings } = await api(`/listings${query}`);
+  const container = document.getElementById('listings-table');
+  if (listings.length === 0) {
+    container.innerHTML = '<div class="empty">No shipments found.</div>';
+    return;
+  }
+  container.innerHTML = `
+    <table>
+      <thead><tr><th>ID</th><th>Cargo</th><th>Status</th><th>Price</th><th>Shipper</th><th>Driver</th><th></th></tr></thead>
+      <tbody>
+        ${listings
+          .map(
+            (l) => `<tr>
+              <td class="num">${l.id}</td>
+              <td>${l.cargo_type}</td>
+              <td>${statusBadge(l.status)}</td>
+              <td class="num">${compactNumber(l.price)}</td>
+              <td class="num">${l.shipper_id}</td>
+              <td class="num">${l.driver_id ?? '—'}</td>
+              <td>${
+                l.status !== 'completed' && l.status !== 'cancelled'
+                  ? `<button class="secondary" data-cancel="${l.id}">Force cancel</button>`
+                  : ''
+              }</td>
+            </tr>`
+          )
+          .join('')}
+      </tbody>
+    </table>`;
+
+  container.querySelectorAll('[data-cancel]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      if (!confirm(`Force-cancel listing #${btn.dataset.cancel}?`)) return;
+      await api(`/listings/${btn.dataset.cancel}/cancel`, { method: 'POST' });
+      loadListings(document.getElementById('status-filter').value);
+      loadStats();
+    });
+  });
+}
+
+let searchTimer;
+document.getElementById('user-search').addEventListener('input', (e) => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => loadUsers(e.target.value), 250);
+});
+
+document.getElementById('status-filter').addEventListener('change', (e) => {
+  loadListings(e.target.value);
+});
+
+if (token) showDashboard();
+</script>
+</body>
+</html>
