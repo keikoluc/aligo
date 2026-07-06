@@ -266,7 +266,7 @@ class _ShipmentDetailScreenState extends State<ShipmentDetailScreen> {
                   Row(
                     children: [
                       const Icon(
-                        Icons.check_circle_outline_rounded,
+                        Icons.check_circle_outline,
                         size: 16,
                         color: AppColors.success,
                       ),

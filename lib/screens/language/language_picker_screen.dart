@@ -126,7 +126,7 @@ class _LanguagePickerScreenState extends State<LanguagePickerScreen> {
                                     ),
                                   ),
                                   if (_selected == lang.$1)
-                                    Icon(Icons.check_circle_rounded, color: AppColors.amber),
+                                    Icon(Icons.check_circle, color: AppColors.amber),
                                 ],
                               ),
                             ),

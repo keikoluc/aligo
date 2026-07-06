@@ -136,7 +136,7 @@ class _TelegramLinkScreenState extends State<TelegramLinkScreen> {
                   Row(
                     children: [
                       const Icon(
-                        Icons.send_rounded,
+                        Icons.send,
                         color: AppColors.info,
                         size: 28,
                       ),
@@ -159,7 +159,7 @@ class _TelegramLinkScreenState extends State<TelegramLinkScreen> {
                     PrimaryButton(
                       label: l10n.telegramConnectButton,
                       isLoading: _isBusy,
-                      icon: Icons.link_rounded,
+                      icon: Icons.link,
                       onPressed: _connect,
                     ),
                     if (_pendingCode != null) ...[
@@ -200,7 +200,7 @@ class _TelegramLinkScreenState extends State<TelegramLinkScreen> {
                               const SizedBox(height: AppSpacing.sm),
                               TextButton.icon(
                                 onPressed: _openBotAgain,
-                                icon: const Icon(Icons.open_in_new_rounded),
+                                icon: const Icon(Icons.open_in_new),
                                 label: Text(l10n.telegramOpenBotButton),
                               ),
                             ],

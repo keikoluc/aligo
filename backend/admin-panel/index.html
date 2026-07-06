@@ -263,6 +263,16 @@ function compactNumber(n) {
   return new Intl.NumberFormat('en-US', { notation: 'compact' }).format(n);
 }
 
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, (ch) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  }[ch]));
+}
+
 async function loadStats() {
   const stats = await api('/stats');
   const roleLabels = { shipper: 'Shippers', driver: 'Drivers', unassigned: 'No role yet' };
@@ -307,10 +317,10 @@ async function loadUsers(search) {
           .map(
             (u) => `<tr>
               <td class="num">${u.id}</td>
-              <td>${u.full_name || '—'}</td>
-              <td>${u.email}</td>
-              <td>${u.role || '—'}</td>
-              <td>${u.phone || '—'}</td>
+              <td>${escapeHtml(u.full_name) || '—'}</td>
+              <td>${escapeHtml(u.email)}</td>
+              <td>${escapeHtml(u.role) || '—'}</td>
+              <td>${escapeHtml(u.phone) || '—'}</td>
               <td>${u.is_verified ? 'Yes' : 'No'}</td>
             </tr>`
           )
@@ -335,7 +345,7 @@ async function loadListings(status) {
           .map(
             (l) => `<tr>
               <td class="num">${l.id}</td>
-              <td>${l.cargo_type}</td>
+              <td>${escapeHtml(l.cargo_type)}</td>
               <td>${statusBadge(l.status)}</td>
               <td class="num">${compactNumber(l.price)}</td>
               <td class="num">${l.shipper_id}</td>

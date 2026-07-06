@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   foregroundColor: Theme.of(context).colorScheme.onSurface,
                   elevation: 4,
                   onPressed: () {},
-                  child: const Icon(Icons.my_location_rounded),
+                  child: const Icon(Icons.my_location),
                 ),
               ),
             ],
@@ -173,7 +173,7 @@ class _AligoDrawer extends StatelessWidget {
               radius: 32,
               backgroundColor: AppColors.slate,
               child: const Icon(
-                Icons.person_rounded,
+                Icons.person,
                 color: AppColors.amber,
                 size: 32,
               ),
@@ -225,7 +225,7 @@ class _AligoDrawer extends StatelessWidget {
               title: Text(l10n.support),
             ),
             ListTile(
-              leading: const Icon(Icons.language_rounded),
+              leading: const Icon(Icons.language),
               title: Text(l10n.language),
               onTap: () {
                 Navigator.of(context).pop();
@@ -238,7 +238,7 @@ class _AligoDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.send_rounded),
+              leading: const Icon(Icons.send),
               title: Text(l10n.telegramTitle),
               onTap: () {
                 Navigator.of(context).pop();

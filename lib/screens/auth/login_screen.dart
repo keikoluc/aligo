@@ -7,6 +7,7 @@ import '../../core/theme/app_theme.dart';
 import '../../l10n/app_localizations.dart';
 import '../../widgets/aligo_logo.dart';
 import '../../widgets/app_text_field.dart';
+import '../../widgets/google_logo.dart';
 import '../../widgets/primary_button.dart';
 import '../home/home_screen.dart';
 import '../onboarding/role_select_screen.dart';
@@ -196,10 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           strokeWidth: 2,
                                         ),
                                       )
-                                    : const Icon(
-                                        Icons.g_mobiledata_rounded,
-                                        size: 26,
-                                      ),
+                                    : const GoogleLogo(size: 18),
                                 label: Text(l10n.google),
                               ),
                             ),
@@ -207,7 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Expanded(
                               child: OutlinedButton.icon(
                                 onPressed: () {},
-                                icon: const Icon(Icons.apple_rounded, size: 22),
+                                icon: const Icon(Icons.apple, size: 20),
                                 label: Text(l10n.apple),
                               ),
                             ),

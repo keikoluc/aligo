@@ -203,6 +203,10 @@ const TRANSLATIONS = {
     uz: "Google hisob ma'lumotlari noto'g'ri.",
     ru: 'Недействительные данные Google.',
   },
+  'Google email is not verified.': {
+    uz: "Google e-pochtangiz tasdiqlanmagan.",
+    ru: 'Ваш email в Google не подтверждён.',
+  },
   'Invalid Telegram session.': {
     uz: "Telegram sessiyasi noto'g'ri.",
     ru: 'Недействительная сессия Telegram.',

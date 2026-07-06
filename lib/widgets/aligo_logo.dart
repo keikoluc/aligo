@@ -31,7 +31,7 @@ class AligoLogo extends StatelessWidget {
       ),
       child: Center(
         child: Icon(
-          Icons.local_shipping_rounded,
+          Icons.local_shipping,
           color: AppColors.amber,
           size: size * 0.5,
         ),

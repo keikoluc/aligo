@@ -76,7 +76,7 @@ class _VehicleSelectionSheetState extends State<VehicleSelectionSheet> {
                     'Choose your vehicle',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  Icon(Icons.tune_rounded, color: scheme.onSurfaceVariant),
+                  Icon(Icons.tune, color: scheme.onSurfaceVariant),
                 ],
               ),
               const SizedBox(height: 4),

@@ -105,6 +105,12 @@ router.post('/google', async (req, res) => {
   try {
     const profile = await verifyGoogleIdToken(idToken);
 
+    if (!profile.emailVerified) {
+      return res
+        .status(401)
+        .json({ error: t('Google email is not verified.', req.locale) });
+    }
+
     let user = await userService.findByEmail(profile.email);
     if (!user) {
       user = await userService.createUser({

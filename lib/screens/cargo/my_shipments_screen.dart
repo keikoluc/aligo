@@ -110,7 +110,7 @@ class _MyShipmentsScreenState extends State<MyShipmentsScreen> {
           );
           _refresh();
         },
-        icon: const Icon(Icons.add_rounded),
+        icon: const Icon(Icons.add),
         label: Text(l10n.postNewLoad),
       ),
       body: SafeArea(
@@ -255,7 +255,7 @@ class _ShipmentCard extends StatelessWidget {
             if (listing.myRating != null)
               Row(
                 children: [
-                  const Icon(Icons.check_circle_outline_rounded, size: 16, color: AppColors.success),
+                  const Icon(Icons.check_circle_outline, size: 16, color: AppColors.success),
                   const SizedBox(width: 6),
                   Text(
                     l10n.ratedDriverStars(listing.myRating!.stars),

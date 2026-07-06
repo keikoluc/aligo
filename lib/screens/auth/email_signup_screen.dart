@@ -95,7 +95,7 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                   controller: _nameController,
                   label: l10n.fullNameLabel,
                   hint: l10n.fullNameHint,
-                  prefixIcon: Icons.person_outline_rounded,
+                  prefixIcon: Icons.person_outline,
                   validator: _validateName,
                 ),
                 const SizedBox(height: AppSpacing.md),

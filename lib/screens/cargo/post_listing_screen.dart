@@ -443,7 +443,7 @@ class _LocationPickerSheetState extends State<_LocationPickerSheet> {
                         hintText: AppLocalizations.of(
                           context,
                         )!.searchAddressHint,
-                        prefixIcon: const Icon(Icons.search_rounded),
+                        prefixIcon: const Icon(Icons.search),
                       ),
                       onSubmitted: (_) => _search(),
                     ),
@@ -457,7 +457,7 @@ class _LocationPickerSheetState extends State<_LocationPickerSheet> {
                             height: 18,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Icon(Icons.arrow_forward_rounded),
+                        : const Icon(Icons.arrow_forward),
                   ),
                 ],
               ),

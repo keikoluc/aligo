@@ -63,7 +63,7 @@ class _RatingDialogState extends State<_RatingDialog> {
               return IconButton(
                 onPressed: () => setState(() => _stars = starValue),
                 icon: Icon(
-                  starValue <= _stars ? Icons.star_rounded : Icons.star_outline_rounded,
+                  starValue <= _stars ? Icons.star : Icons.star_outline,
                   color: scheme.secondary,
                   size: 32,
                 ),

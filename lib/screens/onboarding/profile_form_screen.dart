@@ -160,7 +160,7 @@ class _ProfileFormScreenState extends State<ProfileFormScreen> {
                   controller: _fullNameController,
                   label: l10n.fullNameLabel,
                   hint: l10n.fullNameHint,
-                  prefixIcon: Icons.person_outline_rounded,
+                  prefixIcon: Icons.person_outline,
                   validator: (v) => _requiredValidator(v, l10n.enterFullName),
                 ),
                 const SizedBox(height: AppSpacing.md),

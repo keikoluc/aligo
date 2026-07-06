@@ -25,7 +25,7 @@ class DestinationSearchBar extends StatelessWidget {
     return Row(
       children: [
         _CircleIconButton(
-          icon: Icons.menu_rounded,
+          icon: Icons.menu,
           onTap: onMenuTap,
           surface: surface,
         ),
@@ -46,7 +46,7 @@ class DestinationSearchBar extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.search_rounded, color: scheme.onSurfaceVariant),
+                    Icon(Icons.search, color: scheme.onSurfaceVariant),
                     const SizedBox(width: AppSpacing.sm),
                     Expanded(
                       child: Text(
@@ -62,7 +62,7 @@ class DestinationSearchBar extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
-                        Icons.qr_code_scanner_rounded,
+                        Icons.qr_code_scanner,
                         size: 16,
                         color: AppColors.slate,
                       ),

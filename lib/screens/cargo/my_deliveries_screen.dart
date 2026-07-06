@@ -264,7 +264,7 @@ class _DeliveryCard extends StatelessWidget {
             const SizedBox(height: 8),
             Row(
               children: [
-                Icon(Icons.person_outline_rounded, size: 16, color: scheme.onSurfaceVariant),
+                Icon(Icons.person_outline, size: 16, color: scheme.onSurfaceVariant),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
@@ -312,7 +312,7 @@ class _DeliveryCard extends StatelessWidget {
             if (listing.myRating != null)
               Row(
                 children: [
-                  const Icon(Icons.check_circle_outline_rounded, size: 16, color: AppColors.success),
+                  const Icon(Icons.check_circle_outline, size: 16, color: AppColors.success),
                   const SizedBox(width: 6),
                   Text(
                     l10n.ratedShipperStars(listing.myRating!.stars),

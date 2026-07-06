@@ -122,6 +122,16 @@
     return div.firstElementChild;
   }
 
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, (ch) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;',
+    }[ch]));
+  }
+
   // ---------- Auth ----------
 
   async function boot() {
@@ -198,7 +208,7 @@
 
   function cargoTypeLabel(key) {
     const found = CARGO_TYPES.find((c) => c[0] === key);
-    return found ? t(found[1]) : key;
+    return found ? t(found[1]) : escapeHtml(key);
   }
 
   function listingCard(listing, actionsHtml) {
@@ -208,7 +218,7 @@
           <div class="card-title">${cargoTypeLabel(listing.cargoType)}</div>
           ${statusPill(listing.status)}
         </div>
-        <div class="card-route">${listing.pickup.label} → ${listing.dropoff.label}</div>
+        <div class="card-route">${escapeHtml(listing.pickup.label)} → ${escapeHtml(listing.dropoff.label)}</div>
         <div class="card-price">${Math.round(listing.price)} so'm</div>
         ${actionsHtml || ''}
       </div>
@@ -421,7 +431,7 @@
             suggestions.innerHTML = features
               .map(
                 (f, i) =>
-                  `<div class="suggestion-item" data-index="${i}">${f.place_name}</div>`
+                  `<div class="suggestion-item" data-index="${i}">${escapeHtml(f.place_name)}</div>`
               )
               .join('');
             suggestions.style.display = features.length ? 'block' : 'none';

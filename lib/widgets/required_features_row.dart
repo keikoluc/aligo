@@ -8,13 +8,13 @@ import '../models/driver_vehicle_model.dart';
 IconData _iconFor(VehicleAmenity amenity) {
   switch (amenity) {
     case VehicleAmenity.refrigerated:
-      return Icons.ac_unit_rounded;
+      return Icons.ac_unit;
     case VehicleAmenity.sideRearTent:
       return Icons.door_sliding_outlined;
     case VehicleAmenity.lift:
       return Icons.arrow_circle_up_outlined;
     case VehicleAmenity.tieDownStraps:
-      return Icons.link_rounded;
+      return Icons.link;
   }
 }
 
