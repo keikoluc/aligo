@@ -10,7 +10,7 @@ class AppConfig {
 
   /// Base URL of the Aligo auth backend.
   static String get backendBaseUrl {
-    return 'https://aligoo.uz';
+    return 'https://api.aligoo.uz';
   }
 
   /// OAuth "server" client ID. Passed to google_sign_in as the
