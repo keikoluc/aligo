@@ -58,7 +58,11 @@ class _LanguagePickerScreenState extends State<LanguagePickerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    // Preview strings in the language the user has tapped, without
+    // touching the app's actual active locale (and thus without
+    // disturbing which screen MaterialApp.home resolves to) until
+    // they confirm.
+    final AppLocalizations l10n = lookupAppLocalizations(Locale(_selected));
     final TextTheme textTheme = Theme.of(context).textTheme;
     final ColorScheme scheme = Theme.of(context).colorScheme;
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
@@ -101,10 +105,7 @@ class _LanguagePickerScreenState extends State<LanguagePickerScreen> {
                         (lang) => Padding(
                           padding: const EdgeInsets.only(bottom: AppSpacing.md),
                           child: InkWell(
-                            onTap: () {
-                              setState(() => _selected = lang.$1);
-                              AligoApp.setLocale(context, Locale(lang.$1));
-                            },
+                            onTap: () => setState(() => _selected = lang.$1),
                             borderRadius: BorderRadius.circular(AppRadius.xl),
                             child: Container(
                               padding: const EdgeInsets.all(AppSpacing.md),
