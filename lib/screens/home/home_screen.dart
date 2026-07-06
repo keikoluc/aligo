@@ -1,4 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../core/config/app_config.dart';
+import '../../core/network/app_version_api.dart';
 import '../../core/network/push_service.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
@@ -29,10 +33,25 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool get _isShipper => widget.user.role == UserRole.shipper;
 
+  AppVersionInfo? _updateInfo;
+  bool _updateBannerDismissed = false;
+
   @override
   void initState() {
     super.initState();
     registerForPushNotifications(widget.token);
+    _checkForUpdate();
+  }
+
+  Future<void> _checkForUpdate() async {
+    // Only the sideloaded Android build needs this — the web build is
+    // always the latest by definition, and there's no iOS build yet.
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
+    final info = await AppVersionApi().fetchLatest();
+    if (!mounted || info == null) return;
+    if (info.latestVersionCode > AppConfig.currentVersionCode) {
+      setState(() => _updateInfo = info);
+    }
   }
 
   void _openRoleAction() {
@@ -86,9 +105,96 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: const Icon(Icons.my_location),
                 ),
               ),
+              if (_updateInfo != null && !_updateBannerDismissed)
+                Positioned(
+                  left: AppSpacing.md,
+                  right: AppSpacing.md,
+                  bottom: AppSpacing.md,
+                  child: SafeArea(
+                    top: false,
+                    child: _UpdateBanner(
+                      versionName: _updateInfo!.latestVersionName,
+                      onDownload: () => launchUrl(
+                        Uri.parse(_updateInfo!.downloadUrl),
+                        mode: LaunchMode.externalApplication,
+                      ),
+                      onDismiss: () =>
+                          setState(() => _updateBannerDismissed = true),
+                    ),
+                  ),
+                ),
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class _UpdateBanner extends StatelessWidget {
+  final String versionName;
+  final VoidCallback onDownload;
+  final VoidCallback onDismiss;
+
+  const _UpdateBanner({
+    required this.versionName,
+    required this.onDownload,
+    required this.onDismiss,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme scheme = Theme.of(context).colorScheme;
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
+
+    return Material(
+      color: isDark ? AppColors.surfaceDark : AppColors.white,
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      elevation: 6,
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Icon(Icons.system_update, color: AppColors.amber),
+            const SizedBox(width: AppSpacing.sm),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(l10n.updateAvailableTitle, style: textTheme.titleSmall),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n.updateAvailableBody(versionName),
+                    style: textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton(
+                      onPressed: onDownload,
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(0, 0),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: Text(l10n.updateDownloadButton),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.close, size: 18, color: scheme.onSurfaceVariant),
+              onPressed: onDismiss,
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              visualDensity: VisualDensity.compact,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -552,4 +552,15 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get telegramBotNotConfigured =>
       'The Telegram bot isn\'t set up yet — ask the team to add a bot token.';
+
+  @override
+  String get updateAvailableTitle => 'A new version is available';
+
+  @override
+  String updateAvailableBody(String version) {
+    return 'Aligo $version is out. Download it to get the latest fixes.';
+  }
+
+  @override
+  String get updateDownloadButton => 'Download';
 }

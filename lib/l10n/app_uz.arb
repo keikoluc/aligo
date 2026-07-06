@@ -190,5 +190,12 @@
   "telegramCodeExpiry": "Bu kod {minutes} daqiqa amal qiladi.",
   "telegramUnlinkedMessage": "Telegram uzildi.",
   "telegramCouldNotOpenBot": "Botni ochib bo'lmadi. Kodni qo'lda yuboring.",
-  "telegramBotNotConfigured": "Telegram bot hali sozlanmagan — jamoadan bot tokeni qo'shishni so'rang."
+  "telegramBotNotConfigured": "Telegram bot hali sozlanmagan — jamoadan bot tokeni qo'shishni so'rang.",
+
+  "updateAvailableTitle": "Yangi versiya mavjud",
+  "updateAvailableBody": "Aligo {version} chiqdi. Eng so'nggi tuzatishlar uchun yuklab oling.",
+  "@updateAvailableBody": {
+    "placeholders": { "version": { "type": "String" } }
+  },
+  "updateDownloadButton": "Yuklab olish"
 }

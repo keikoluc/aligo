@@ -1125,6 +1125,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The Telegram bot isn\'t set up yet — ask the team to add a bot token.'**
   String get telegramBotNotConfigured;
+
+  /// No description provided for @updateAvailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A new version is available'**
+  String get updateAvailableTitle;
+
+  /// No description provided for @updateAvailableBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Aligo {version} is out. Download it to get the latest fixes.'**
+  String updateAvailableBody(String version);
+
+  /// No description provided for @updateDownloadButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get updateDownloadButton;
 }
 
 class _AppLocalizationsDelegate

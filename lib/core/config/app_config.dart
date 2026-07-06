@@ -23,4 +23,12 @@ class AppConfig {
   /// URL restrictions in the Mapbox dashboard.
   static const String mapboxAccessToken =
       'pk.eyJ1Ijoia2Vpa29sdWMiLCJhIjoiY21yNzNmcnN2MHlrMzJ5cXJsbzI5dG1ubSJ9.IUM29uRGwwPtb3m2jZKjoQ';
+
+  /// Must match the Android `versionCode` this build ships with (see
+  /// pubspec.yaml's `version: name+code` and android/app/build.gradle.kts),
+  /// so the app can tell it's outdated against `/api/app/version`. Since
+  /// the app is sideloaded (no Play Store auto-update), bump this by hand
+  /// alongside pubspec.yaml and backend/src/config/appVersion.js whenever
+  /// a new APK is uploaded to /download.
+  static const int currentVersionCode = 1;
 }

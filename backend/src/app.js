@@ -7,6 +7,7 @@ const cargoRoutes = require('./routes/cargo');
 const adminRoutes = require('./routes/admin');
 const telegramMiniAppRoutes = require('./routes/telegramMiniApp');
 const { localeFromRequest } = require('./i18n');
+const appVersion = require('./config/appVersion');
 
 const app = express();
 
@@ -23,6 +24,10 @@ app.use((req, res, next) => {
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
+});
+
+app.get('/api/app/version', (req, res) => {
+  res.json(appVersion);
 });
 
 app.use('/api/auth', authRoutes);

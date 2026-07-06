@@ -190,5 +190,12 @@
   "telegramCodeExpiry": "Код действителен {minutes} минут.",
   "telegramUnlinkedMessage": "Telegram отключён.",
   "telegramCouldNotOpenBot": "Не удалось открыть бота. Отправьте код вручную.",
-  "telegramBotNotConfigured": "Telegram-бот ещё не настроен — попросите команду добавить токен бота."
+  "telegramBotNotConfigured": "Telegram-бот ещё не настроен — попросите команду добавить токен бота.",
+
+  "updateAvailableTitle": "Доступна новая версия",
+  "updateAvailableBody": "Вышла версия Aligo {version}. Скачайте, чтобы получить последние исправления.",
+  "@updateAvailableBody": {
+    "placeholders": { "version": { "type": "String" } }
+  },
+  "updateDownloadButton": "Скачать"
 }

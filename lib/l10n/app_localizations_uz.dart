@@ -556,4 +556,15 @@ class AppLocalizationsUz extends AppLocalizations {
   @override
   String get telegramBotNotConfigured =>
       'Telegram bot hali sozlanmagan — jamoadan bot tokeni qo\'shishni so\'rang.';
+
+  @override
+  String get updateAvailableTitle => 'Yangi versiya mavjud';
+
+  @override
+  String updateAvailableBody(String version) {
+    return 'Aligo $version chiqdi. Eng so\'nggi tuzatishlar uchun yuklab oling.';
+  }
+
+  @override
+  String get updateDownloadButton => 'Yuklab olish';
 }

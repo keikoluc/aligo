@@ -551,4 +551,15 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get telegramBotNotConfigured =>
       'Telegram-бот ещё не настроен — попросите команду добавить токен бота.';
+
+  @override
+  String get updateAvailableTitle => 'Доступна новая версия';
+
+  @override
+  String updateAvailableBody(String version) {
+    return 'Вышла версия Aligo $version. Скачайте, чтобы получить последние исправления.';
+  }
+
+  @override
+  String get updateDownloadButton => 'Скачать';
 }

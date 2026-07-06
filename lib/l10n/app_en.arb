@@ -227,5 +227,12 @@
   },
   "telegramUnlinkedMessage": "Telegram disconnected.",
   "telegramCouldNotOpenBot": "Could not open the bot. Send the code manually instead.",
-  "telegramBotNotConfigured": "The Telegram bot isn't set up yet — ask the team to add a bot token."
+  "telegramBotNotConfigured": "The Telegram bot isn't set up yet — ask the team to add a bot token.",
+
+  "updateAvailableTitle": "A new version is available",
+  "updateAvailableBody": "Aligo {version} is out. Download it to get the latest fixes.",
+  "@updateAvailableBody": {
+    "placeholders": { "version": { "type": "String" } }
+  },
+  "updateDownloadButton": "Download"
 }
