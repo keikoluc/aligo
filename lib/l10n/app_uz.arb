@@ -197,5 +197,7 @@
   "@updateAvailableBody": {
     "placeholders": { "version": { "type": "String" } }
   },
-  "updateDownloadButton": "Yuklab olish"
+  "updateDownloadButton": "Yuklab olish",
+
+  "getAndroidApp": "Android ilovasini yuklab olish"
 }

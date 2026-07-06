@@ -234,5 +234,7 @@
   "@updateAvailableBody": {
     "placeholders": { "version": { "type": "String" } }
   },
-  "updateDownloadButton": "Download"
+  "updateDownloadButton": "Download",
+
+  "getAndroidApp": "Get the Android app"
 }

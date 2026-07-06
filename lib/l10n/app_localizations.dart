@@ -1143,6 +1143,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Download'**
   String get updateDownloadButton;
+
+  /// No description provided for @getAndroidApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Get the Android app'**
+  String get getAndroidApp;
 }
 
 class _AppLocalizationsDelegate

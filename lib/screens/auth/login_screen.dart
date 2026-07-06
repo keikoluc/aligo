@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../core/network/api_exception.dart';
 import '../../core/network/auth_api.dart';
 import '../../core/network/google_auth_service.dart';
@@ -240,6 +242,19 @@ class _LoginScreenState extends State<LoginScreen> {
                             ],
                           ),
                         ),
+                        if (kIsWeb) ...[
+                          const SizedBox(height: AppSpacing.sm),
+                          Center(
+                            child: TextButton.icon(
+                              onPressed: () => launchUrl(
+                                Uri.parse('https://aligoo.uz/download/'),
+                                mode: LaunchMode.externalApplication,
+                              ),
+                              icon: const Icon(Icons.android, size: 18),
+                              label: Text(l10n.getAndroidApp),
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                   ),

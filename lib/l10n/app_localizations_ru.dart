@@ -562,4 +562,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get updateDownloadButton => 'Скачать';
+
+  @override
+  String get getAndroidApp => 'Скачать приложение для Android';
 }

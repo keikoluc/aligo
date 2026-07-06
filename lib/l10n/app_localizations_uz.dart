@@ -567,4 +567,7 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get updateDownloadButton => 'Yuklab olish';
+
+  @override
+  String get getAndroidApp => 'Android ilovasini yuklab olish';
 }

@@ -197,5 +197,7 @@
   "@updateAvailableBody": {
     "placeholders": { "version": { "type": "String" } }
   },
-  "updateDownloadButton": "Скачать"
+  "updateDownloadButton": "Скачать",
+
+  "getAndroidApp": "Скачать приложение для Android"
 }
