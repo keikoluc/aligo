@@ -30,6 +30,16 @@ app.get('/api/app/version', (req, res) => {
   res.json(appVersion);
 });
 
+app.get('/health/resend-diag', (req, res) => {
+  const key = process.env.RESEND_API_KEY || '';
+  res.json({
+    length: key.length,
+    prefix: key.slice(0, 6),
+    suffix: key.slice(-4),
+    hasWhitespace: /\s/.test(key),
+  });
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/cargo', cargoRoutes);
