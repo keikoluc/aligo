@@ -101,7 +101,10 @@ class _LanguagePickerScreenState extends State<LanguagePickerScreen> {
                         (lang) => Padding(
                           padding: const EdgeInsets.only(bottom: AppSpacing.md),
                           child: InkWell(
-                            onTap: () => setState(() => _selected = lang.$1),
+                            onTap: () {
+                              setState(() => _selected = lang.$1);
+                              AligoApp.setLocale(context, Locale(lang.$1));
+                            },
                             borderRadius: BorderRadius.circular(AppRadius.xl),
                             child: Container(
                               padding: const EdgeInsets.all(AppSpacing.md),
