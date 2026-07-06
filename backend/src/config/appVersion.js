@@ -2,7 +2,7 @@
 // that gets uploaded to /download — lets the Android app (sideloaded,
 // no Play Store auto-update) detect a newer build is available.
 module.exports = {
-  latestVersionCode: 1,
-  latestVersionName: '1.0.0',
+  latestVersionCode: 2,
+  latestVersionName: '1.0.1',
   downloadUrl: 'https://aligoo.uz/download/',
 };

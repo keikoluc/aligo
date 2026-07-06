@@ -30,5 +30,5 @@ class AppConfig {
   /// the app is sideloaded (no Play Store auto-update), bump this by hand
   /// alongside pubspec.yaml and backend/src/config/appVersion.js whenever
   /// a new APK is uploaded to /download.
-  static const int currentVersionCode = 1;
+  static const int currentVersionCode = 2;
 }
