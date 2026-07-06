@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 /// Runtime configuration for the Aligo client.
 ///
 /// Only public, client-safe identifiers live here (backend URL, OAuth
@@ -11,15 +9,8 @@ class AppConfig {
   AppConfig._();
 
   /// Base URL of the Aligo auth backend.
-  ///
-  /// A physical Android device can't reach the dev machine via
-  /// `localhost`, so it uses the dev machine's LAN IP instead. Both
-  /// devices must be on the same Wi-Fi network.
   static String get backendBaseUrl {
-    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-      return 'http://192.168.89.26:4000';
-    }
-    return 'http://localhost:4000';
+    return 'https://aligoo.uz';
   }
 
   /// OAuth "server" client ID. Passed to google_sign_in as the
