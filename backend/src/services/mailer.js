@@ -1,8 +1,7 @@
 // Uses Resend's HTTP API rather than SMTP: Render's free tier blocks
 // outbound SMTP (465/587) entirely, so nodemailer/Gmail can never
-// connect there — HTTPS is unaffected. Sends from Resend's shared
-// onboarding@resend.dev sender until aligoo.uz is verified on Resend
-// for a branded "from" address.
+// connect there — HTTPS is unaffected. aligoo.uz is verified on Resend
+// (SPF + DKIM), so sends go out from a branded address.
 const RESEND_API_URL = 'https://api.resend.com/emails';
 
 async function sendOtpEmail(toEmail, code) {
@@ -13,7 +12,7 @@ async function sendOtpEmail(toEmail, code) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'Aligo <onboarding@resend.dev>',
+      from: 'Aligo <noreply@aligoo.uz>',
       to: toEmail,
       subject: `${code} is your Aligo verification code`,
       text: `Your Aligo verification code is ${code}. It expires in ${process.env.OTP_TTL_MINUTES} minutes.`,
