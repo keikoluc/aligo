@@ -215,6 +215,10 @@ const TRANSLATIONS = {
     uz: "Bu kod noto'g'ri yoki muddati tugagan.",
     ru: 'Этот код недействителен или истёк.',
   },
+  'Unsupported language.': {
+    uz: "Qo'llab-quvvatlanmaydigan til.",
+    ru: 'Неподдерживаемый язык.',
+  },
 };
 
 const SUPPORTED_LOCALES = ['uz', 'ru', 'en'];

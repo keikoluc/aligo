@@ -15,8 +15,16 @@
   const MAPBOX_TOKEN =
     'pk.eyJ1Ijoia2Vpa29sdWMiLCJhIjoiY21yNzNmcnN2MHlrMzJ5cXJsbzI5dG1ubSJ9.IUM29uRGwwPtb3m2jZKjoQ';
 
-  const LOCALE = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.language_code) || 'uz';
-  const LANG = LOCALE === 'ru' ? 'ru' : LOCALE === 'en' ? 'en' : 'uz';
+  // A user's language choice (Settings screen) is remembered locally and
+  // synced to their account (PUT /api/telegram-miniapp/language) so it
+  // stays in sync with the bot's /language command. Until they pick one,
+  // it falls back to Telegram's own client language.
+  const LANG_STORAGE_KEY = 'aligo_miniapp_lang';
+  function detectLocale() {
+    const code = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.language_code) || 'uz';
+    return code === 'ru' ? 'ru' : code === 'en' ? 'en' : 'uz';
+  }
+  let LANG = localStorage.getItem(LANG_STORAGE_KEY) || detectLocale();
 
   const STR = {
     linkTitle: { uz: "Aligo'ga xush kelibsiz", ru: 'Добро пожаловать в Aligo', en: 'Welcome to Aligo' },
@@ -67,6 +75,22 @@
     statusInTransit: { uz: "Yo'lda", ru: 'В пути', en: 'In transit' },
     statusCompleted: { uz: 'Yetkazildi', ru: 'Доставлен', en: 'Completed' },
     statusCancelled: { uz: 'Bekor qilindi', ru: 'Отменён', en: 'Cancelled' },
+    settingsTitle: { uz: 'Sozlamalar', ru: 'Настройки', en: 'Settings' },
+    languageSectionLabel: { uz: 'Til', ru: 'Язык', en: 'Language' },
+    langUzbek: { uz: "O'zbekcha", ru: 'Узбекский', en: 'Uzbek' },
+    langRussian: { uz: 'Ruscha', ru: 'Русский', en: 'Russian' },
+    langEnglish: { uz: 'Inglizcha', ru: 'Английский', en: 'English' },
+    accountSectionLabel: { uz: 'Hisob', ru: 'Аккаунт', en: 'Account' },
+    unlinkAccountButton: {
+      uz: "Hisobni Telegram'dan uzish",
+      ru: 'Отвязать аккаунт от Telegram',
+      en: 'Unlink account from Telegram',
+    },
+    unlinkConfirmText: {
+      uz: "Hisobingizni Telegram'dan uzmoqchimisiz?",
+      ru: 'Отвязать аккаунт от Telegram?',
+      en: 'Unlink your account from Telegram?',
+    },
   };
   function t(key) {
     return (STR[key] && (STR[key][LANG] || STR[key].uz)) || key;
@@ -144,6 +168,13 @@
       if (result.linked) {
         state.token = result.token;
         state.user = result.user;
+        // The account's stored preference (settable from either the Mini
+        // App or the bot's /language command) wins over whatever was
+        // guessed/cached locally, so both stay in sync.
+        if (result.user.telegramLanguage && result.user.telegramLanguage !== LANG) {
+          LANG = result.user.telegramLanguage;
+          localStorage.setItem(LANG_STORAGE_KEY, LANG);
+        }
         renderHome();
       } else {
         renderLinkScreen();
@@ -157,7 +188,10 @@
     root.innerHTML = '';
     const screen = el(`
       <div class="screen">
-        <div class="header"><div class="logo-dot"></div><h1>Aligo</h1></div>
+        <div class="header">
+          <div class="logo-dot"></div><h1>Aligo</h1>
+          <button class="icon-btn" id="settings-btn" aria-label="Settings">⚙️</button>
+        </div>
         <h2>${t('linkTitle')}</h2>
         <p>${t('linkIntro')}</p>
         <div class="field">
@@ -169,6 +203,7 @@
       </div>
     `);
     root.appendChild(screen);
+    screen.querySelector('#settings-btn').addEventListener('click', () => renderSettingsScreen(() => renderLinkScreen(errorMessage)));
 
     screen.querySelector('#link-btn').addEventListener('click', async () => {
       const code = screen.querySelector('#code-input').value.trim();
@@ -189,6 +224,82 @@
         btn.disabled = false;
       }
     });
+  }
+
+  // ---------- Settings ----------
+
+  const LANGUAGES = [
+    ['uz', 'langUzbek'],
+    ['ru', 'langRussian'],
+    ['en', 'langEnglish'],
+  ];
+
+  function renderSettingsScreen(onBack) {
+    root.innerHTML = '';
+    const screen = el(`
+      <div class="screen">
+        <div class="back-link" id="back-link">${t('back')}</div>
+        <h2>${t('settingsTitle')}</h2>
+        <p>${t('languageSectionLabel')}</p>
+        <div id="lang-list"></div>
+        ${
+          state.token
+            ? `<p style="margin-top:24px">${t('accountSectionLabel')}</p>
+               <button class="btn btn-danger" id="unlink-btn">${t('unlinkAccountButton')}</button>`
+            : ''
+        }
+      </div>
+    `);
+    root.appendChild(screen);
+    screen.querySelector('#back-link').addEventListener('click', onBack);
+
+    const langList = screen.querySelector('#lang-list');
+    function renderLangList() {
+      langList.innerHTML = LANGUAGES.map(
+        ([code, labelKey]) => `
+          <div class="settings-row ${code === LANG ? 'active' : ''}" data-lang="${code}">
+            <span>${t(labelKey)}</span>
+            ${code === LANG ? '<span>✓</span>' : ''}
+          </div>
+        `
+      ).join('');
+      langList.querySelectorAll('[data-lang]').forEach((row) => {
+        row.addEventListener('click', async () => {
+          const lang = row.dataset.lang;
+          if (lang === LANG) return;
+          LANG = lang;
+          localStorage.setItem(LANG_STORAGE_KEY, lang);
+          if (state.token) {
+            api('/api/telegram-miniapp/language', {
+              method: 'PUT',
+              body: JSON.stringify({ language: lang }),
+            }).catch(() => {});
+          }
+          renderSettingsScreen(onBack);
+        });
+      });
+    }
+    renderLangList();
+
+    const unlinkBtn = screen.querySelector('#unlink-btn');
+    if (unlinkBtn) {
+      unlinkBtn.addEventListener('click', async () => {
+        const confirmed = tg && tg.showConfirm
+          ? await new Promise((resolve) => tg.showConfirm(t('unlinkConfirmText'), resolve))
+          : window.confirm(t('unlinkConfirmText'));
+        if (!confirmed) return;
+        unlinkBtn.disabled = true;
+        try {
+          await api('/api/telegram-miniapp/unlink', { method: 'POST' });
+          state.token = null;
+          state.user = null;
+          renderLinkScreen();
+        } catch (err) {
+          toast(err.message);
+          unlinkBtn.disabled = false;
+        }
+      });
+    }
   }
 
   // ---------- Home ----------
@@ -229,13 +340,17 @@
     root.innerHTML = '';
     const screen = el(`
       <div class="screen">
-        <div class="header"><div class="logo-dot"></div><h1>${t('myShipments')}</h1></div>
+        <div class="header">
+          <div class="logo-dot"></div><h1>${t('myShipments')}</h1>
+          <button class="icon-btn" id="settings-btn" aria-label="Settings">⚙️</button>
+        </div>
         <div id="list-container"><div class="spinner"></div></div>
         <button class="fab" id="new-load-fab">+</button>
       </div>
     `);
     root.appendChild(screen);
     screen.querySelector('#new-load-fab').addEventListener('click', renderPostLoadScreen);
+    screen.querySelector('#settings-btn').addEventListener('click', () => renderSettingsScreen(renderShipperHome));
 
     try {
       const { listings } = await api('/api/cargo/mine');
@@ -275,7 +390,10 @@
     root.innerHTML = '';
     const screen = el(`
       <div class="screen">
-        <div class="header"><div class="logo-dot"></div><h1>Aligo</h1></div>
+        <div class="header">
+          <div class="logo-dot"></div><h1>Aligo</h1>
+          <button class="icon-btn" id="settings-btn" aria-label="Settings">⚙️</button>
+        </div>
         <div class="tabs">
           <div class="tab ${state.driverTab === 'nearby' ? 'active' : ''}" data-tab="nearby">${t('nearbyLoads')}</div>
           <div class="tab ${state.driverTab === 'deliveries' ? 'active' : ''}" data-tab="deliveries">${t('myDeliveries')}</div>
@@ -284,6 +402,7 @@
       </div>
     `);
     root.appendChild(screen);
+    screen.querySelector('#settings-btn').addEventListener('click', () => renderSettingsScreen(renderDriverHome));
 
     screen.querySelectorAll('.tab').forEach((tabEl) => {
       tabEl.addEventListener('click', () => {

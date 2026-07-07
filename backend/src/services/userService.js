@@ -36,6 +36,7 @@ function toPublicUser(user) {
     age: user.age,
     lat: user.lat,
     lng: user.lng,
+    telegramLanguage: user.telegram_language,
   };
 }
 

@@ -35,6 +35,7 @@ const SCHEMA = `
   ALTER TABLE users ADD COLUMN IF NOT EXISTS telegram_chat_id TEXT;
   ALTER TABLE users ADD COLUMN IF NOT EXISTS telegram_link_code TEXT;
   ALTER TABLE users ADD COLUMN IF NOT EXISTS telegram_link_code_expires_at TEXT;
+  ALTER TABLE users ADD COLUMN IF NOT EXISTS telegram_language TEXT;
 
   CREATE TABLE IF NOT EXISTS driver_vehicles (
     id SERIAL PRIMARY KEY,

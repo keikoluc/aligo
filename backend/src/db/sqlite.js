@@ -105,6 +105,7 @@ for (const [name, type] of Object.entries({
   telegram_chat_id: 'TEXT',
   telegram_link_code: 'TEXT',
   telegram_link_code_expires_at: 'TEXT',
+  telegram_language: 'TEXT',
 })) {
   if (!existingUserColumns.has(name)) {
     db.exec(`ALTER TABLE users ADD COLUMN ${name} ${type}`);

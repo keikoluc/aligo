@@ -4,10 +4,14 @@ const telegramLinkService = require('./telegramLinkService');
 const cargoListingService = require('./cargoListingService');
 
 // The bot talks directly to Telegram, outside the Flutter app's i18n
-// pipeline (X-App-Locale header), so it picks a locale straight from
-// Telegram's own per-chat `language_code` — uz/ru if recognized,
+// pipeline (X-App-Locale header). A user can override the language via
+// /language (stored on their linked account, shared with the Mini App —
+// see telegramLinkService.setLanguage); until they do, it falls back to
+// Telegram's own per-chat `language_code` — uz/ru/en if recognized,
 // otherwise uz (the app's own default), never blank.
-function localeOf(ctx) {
+async function localeOf(ctx) {
+  const user = await telegramLinkService.findByChatId(ctx.chat.id);
+  if (user?.telegram_language) return user.telegram_language;
   const code = ctx.from?.language_code;
   return code === 'ru' ? 'ru' : code === 'en' ? 'en' : 'uz';
 }
@@ -97,6 +101,16 @@ const STRINGS = {
     ru: 'Не удалось выполнить действие — статус, возможно, уже изменился.',
     en: 'Could not perform that action — the status may have already changed.',
   },
+  chooseLanguage: {
+    uz: 'Tilni tanlang:',
+    ru: 'Выберите язык:',
+    en: 'Choose a language:',
+  },
+  languageSet: {
+    uz: "✅ Til o'zbekchaga o'zgartirildi.",
+    ru: '✅ Язык изменён на русский.',
+    en: '✅ Language switched to English.',
+  },
 };
 
 const CARGO_TYPE_LABELS = {
@@ -146,6 +160,14 @@ function openAppKeyboard(locale) {
   const url = telegramClient.getMiniAppUrl();
   if (!url) return undefined;
   return Markup.inlineKeyboard([[Markup.button.webApp(S('btnOpenApp', locale), url)]]);
+}
+
+function languageKeyboard() {
+  return Markup.inlineKeyboard([
+    [Markup.button.callback("🇺🇿 O'zbekcha", 'lang:uz')],
+    [Markup.button.callback('🇷🇺 Русский', 'lang:ru')],
+    [Markup.button.callback('🇬🇧 English', 'lang:en')],
+  ]);
 }
 
 function menuFor(user, locale) {
@@ -249,7 +271,7 @@ async function handleLink(ctx, code, locale) {
 }
 
 async function runAction(ctx, { role, run, okKey }) {
-  const locale = localeOf(ctx);
+  const locale = await localeOf(ctx);
   const user = await requireLinkedRole(ctx, role, locale);
   await ctx.answerCbQuery().catch(() => {});
   if (!user) return;
@@ -269,7 +291,7 @@ function registerHandlers() {
   if (!bot) return;
 
   bot.start(async (ctx) => {
-    const locale = localeOf(ctx);
+    const locale = await localeOf(ctx);
     const payload = ctx.startPayload || '';
     if (payload.startsWith('link_')) {
       await handleLink(ctx, payload.slice(5), locale);
@@ -288,7 +310,7 @@ function registerHandlers() {
   });
 
   bot.command('link', async (ctx) => {
-    const locale = localeOf(ctx);
+    const locale = await localeOf(ctx);
     const code = ctx.message.text.split(/\s+/).slice(1)[0];
     if (!code) {
       await ctx.reply(S('linkUsageHint', locale));
@@ -298,7 +320,7 @@ function registerHandlers() {
   });
 
   bot.command('unlink', async (ctx) => {
-    const locale = localeOf(ctx);
+    const locale = await localeOf(ctx);
     const user = await telegramLinkService.findByChatId(ctx.chat.id);
     if (!user) {
       await ctx.reply(S('notLinked', locale));
@@ -306,6 +328,24 @@ function registerHandlers() {
     }
     await telegramLinkService.unlink(user.id);
     await ctx.reply(S('unlinkSuccess', locale), Markup.removeKeyboard());
+  });
+
+  bot.command('language', async (ctx) => {
+    const locale = await localeOf(ctx);
+    await ctx.reply(S('chooseLanguage', locale), languageKeyboard());
+  });
+
+  bot.action(/^lang:(uz|ru|en)$/, async (ctx) => {
+    await ctx.answerCbQuery().catch(() => {});
+    const language = ctx.match[1];
+    const user = await telegramLinkService.findByChatId(ctx.chat.id);
+    if (!user) {
+      await ctx.reply(S('notLinked', language));
+      return;
+    }
+    await telegramLinkService.setLanguage(user.id, language);
+    await ctx.editMessageReplyMarkup(undefined).catch(() => {});
+    await ctx.reply(S('languageSet', language), menuFor(user, language));
   });
 
   bot.action(/^accept:(\d+)$/, (ctx) =>
@@ -328,7 +368,7 @@ function registerHandlers() {
     const text = ctx.message.text;
     if (text.startsWith('/')) return;
 
-    const locale = localeOf(ctx);
+    const locale = await localeOf(ctx);
     const user = await telegramLinkService.findByChatId(ctx.chat.id);
     if (!user) {
       await ctx.reply(S('notLinked', locale));

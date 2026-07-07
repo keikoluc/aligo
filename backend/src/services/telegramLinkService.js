@@ -59,4 +59,22 @@ async function findByChatId(chatId) {
   return db.get('SELECT * FROM users WHERE telegram_chat_id = ?', [String(chatId)]);
 }
 
-module.exports = { createLinkCode, consumeLinkCode, unlink, findByChatId };
+const SUPPORTED_LANGUAGES = new Set(['uz', 'ru', 'en']);
+
+// Shared by the bot's /language command and the Mini App's settings
+// screen, so switching it in either place keeps both in sync.
+async function setLanguage(userId, language) {
+  if (!SUPPORTED_LANGUAGES.has(language)) {
+    throw new Error(`Unsupported language: ${language}`);
+  }
+  await db.run('UPDATE users SET telegram_language = ? WHERE id = ?', [language, userId]);
+}
+
+module.exports = {
+  createLinkCode,
+  consumeLinkCode,
+  unlink,
+  findByChatId,
+  setLanguage,
+  SUPPORTED_LANGUAGES,
+};

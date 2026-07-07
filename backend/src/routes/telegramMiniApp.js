@@ -4,6 +4,7 @@ const telegramAuthService = require('../services/telegramAuthService');
 const telegramLinkService = require('../services/telegramLinkService');
 const userService = require('../services/userService');
 const { issueToken } = require('../services/tokenService');
+const { requireAuth } = require('../middleware/auth');
 const { t } = require('../i18n');
 
 const router = express.Router();
@@ -51,6 +52,25 @@ router.post('/link', async (req, res) => {
     token: issueToken(result.user),
     user: userService.toPublicUser(result.user),
   });
+});
+
+// Shared by the Mini App's settings screen and the bot's /language
+// command (telegramLinkService.setLanguage), so switching it in either
+// place keeps both in sync for the same linked account.
+router.put('/language', requireAuth, async (req, res) => {
+  const { language } = req.body || {};
+  if (!telegramLinkService.SUPPORTED_LANGUAGES.has(language)) {
+    return res.status(400).json({ error: t('Unsupported language.', req.locale) });
+  }
+  await telegramLinkService.setLanguage(req.userId, language);
+  return res.json({ ok: true });
+});
+
+// Lets the Mini App's settings screen unlink the account without needing
+// to leave and send /unlink to the bot chat.
+router.post('/unlink', requireAuth, async (req, res) => {
+  await telegramLinkService.unlink(req.userId);
+  return res.json({ ok: true });
 });
 
 module.exports = router;

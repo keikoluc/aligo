@@ -8,6 +8,7 @@ process.env.TELEGRAM_BOT_TOKEN = 'test-bot-token-123';
 const app = require('../src/app');
 const userService = require('../src/services/userService');
 const telegramLinkService = require('../src/services/telegramLinkService');
+const { issueToken } = require('../src/services/tokenService');
 const { buildInitData } = require('./helpers/telegramInitData');
 
 let userCounter = 0;
@@ -76,4 +77,58 @@ test('POST /api/telegram-miniapp/link rejects an invalid code', async () => {
     .post('/api/telegram-miniapp/link')
     .send({ initData: initDataFor(999999), code: 'BADCOD' });
   assert.equal(res.status, 400);
+});
+
+test('PUT /api/telegram-miniapp/language requires auth', async () => {
+  const res = await request(app)
+    .put('/api/telegram-miniapp/language')
+    .send({ language: 'ru' });
+  assert.equal(res.status, 401);
+});
+
+test('PUT /api/telegram-miniapp/language rejects an unsupported language', async () => {
+  const user = await makeUser();
+  const res = await request(app)
+    .put('/api/telegram-miniapp/language')
+    .set('Authorization', `Bearer ${issueToken(user)}`)
+    .send({ language: 'fr' });
+  assert.equal(res.status, 400);
+});
+
+test('PUT /api/telegram-miniapp/language persists the choice and is reflected on the next /auth call', async () => {
+  const user = await makeUser();
+  const { code } = await telegramLinkService.createLinkCode(user.id);
+  await telegramLinkService.consumeLinkCode(code, 555555);
+
+  const setRes = await request(app)
+    .put('/api/telegram-miniapp/language')
+    .set('Authorization', `Bearer ${issueToken(user)}`)
+    .send({ language: 'ru' });
+  assert.equal(setRes.status, 200);
+
+  const authRes = await request(app)
+    .post('/api/telegram-miniapp/auth')
+    .send({ initData: initDataFor(555555) });
+  assert.equal(authRes.body.user.telegramLanguage, 'ru');
+});
+
+test('POST /api/telegram-miniapp/unlink requires auth', async () => {
+  const res = await request(app).post('/api/telegram-miniapp/unlink');
+  assert.equal(res.status, 401);
+});
+
+test('POST /api/telegram-miniapp/unlink clears the chat link so /auth reports linked:false again', async () => {
+  const user = await makeUser();
+  const { code } = await telegramLinkService.createLinkCode(user.id);
+  await telegramLinkService.consumeLinkCode(code, 444444);
+
+  const unlinkRes = await request(app)
+    .post('/api/telegram-miniapp/unlink')
+    .set('Authorization', `Bearer ${issueToken(user)}`);
+  assert.equal(unlinkRes.status, 200);
+
+  const authRes = await request(app)
+    .post('/api/telegram-miniapp/auth')
+    .send({ initData: initDataFor(444444) });
+  assert.equal(authRes.body.linked, false);
 });
