@@ -9,6 +9,16 @@ const { t } = require('../i18n');
 
 const router = express.Router();
 
+// Lets the app resume a session on launch (it only persists a token,
+// not the profile) instead of always dropping back to the login screen.
+router.get('/', requireAuth, async (req, res) => {
+  const user = await userService.findById(req.userId);
+  if (!user) {
+    return res.status(404).json({ error: t('User not found.', req.locale) });
+  }
+  return res.json({ user: userService.toPublicUser(user) });
+});
+
 router.put('/', requireAuth, async (req, res) => {
   const { role, fullName, phone, address, age, vehicle, lat, lng } =
     req.body || {};

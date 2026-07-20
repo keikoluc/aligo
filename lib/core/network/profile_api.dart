@@ -37,6 +37,23 @@ class ProfileApi {
     return body;
   }
 
+  /// Resumes a session from a stored token alone (see SessionStorage) —
+  /// used at app launch so a returning user lands back in the app
+  /// instead of on the login screen.
+  Future<UserModel> getMe({required String token}) async {
+    final http.Response response;
+    try {
+      response = await _client.get(
+        _endpoint('/api/profile'),
+        headers: _headers(token),
+      );
+    } on http.ClientException {
+      throw ApiException(currentL10n.couldNotReachServer);
+    }
+    final Map<String, dynamic> body = _decode(response);
+    return UserModel.fromJson(body['user'] as Map<String, dynamic>);
+  }
+
   Future<UserModel> saveProfile({
     required String token,
     required UserRole role,

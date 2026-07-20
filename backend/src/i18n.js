@@ -3,6 +3,10 @@
 // threading a `locale` argument through every service function). New
 // messages just need an entry here — no route/service signature changes.
 const TRANSLATIONS = {
+  'User not found.': {
+    uz: 'Foydalanuvchi topilmadi.',
+    ru: 'Пользователь не найден.',
+  },
   'Only drivers can perform this action.': {
     uz: 'Bu amalni faqat haydovchilar bajara oladi.',
     ru: 'Это действие могут выполнять только водители.',

@@ -157,6 +157,21 @@ test('PUT /api/cargo/:id is rejected for a listing owned by someone else', async
   assert.equal(res.status, 409);
 });
 
+test('GET /api/profile requires auth', async () => {
+  const res = await request(app).get('/api/profile');
+  assert.equal(res.status, 401);
+});
+
+test('GET /api/profile returns the authenticated user, so the app can resume a session from just a stored token', async () => {
+  const { user, token } = await makeAuthedUser('driver');
+  const res = await request(app)
+    .get('/api/profile')
+    .set('Authorization', `Bearer ${token}`);
+  assert.equal(res.status, 200);
+  assert.equal(res.body.user.id, user.id);
+  assert.equal(res.body.user.role, 'driver');
+});
+
 test('GET /api/profile/telegram/status reports unlinked for a fresh user', async () => {
   const { token } = await makeAuthedUser('shipper');
   const res = await request(app)
