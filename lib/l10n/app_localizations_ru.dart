@@ -246,6 +246,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get language => 'Язык';
 
   @override
+  String get appearanceSectionTitle => 'Оформление';
+
+  @override
+  String get themeSystemLabel => 'Как в системе';
+
+  @override
+  String get themeLightLabel => 'Светлая';
+
+  @override
+  String get themeDarkLabel => 'Тёмная';
+
+  @override
   String get postShipmentTitle => 'Разместить груз';
 
   @override

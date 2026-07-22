@@ -6,6 +6,7 @@ import 'core/current_locale.dart';
 import 'core/network/profile_api.dart';
 import 'core/storage/locale_storage.dart';
 import 'core/storage/session_storage.dart';
+import 'core/storage/theme_storage.dart';
 import 'core/theme/app_theme.dart';
 import 'l10n/app_localizations.dart';
 import 'models/user_model.dart';
@@ -40,6 +41,12 @@ class AligoApp extends StatefulWidget {
     context.findAncestorStateOfType<_AligoAppState>()?._setLocale(locale);
   }
 
+  /// Switches the app's appearance (light/dark/follow system) at runtime.
+  /// Call after persisting the choice with [ThemeStorage].
+  static void setThemeMode(BuildContext context, ThemeMode themeMode) {
+    context.findAncestorStateOfType<_AligoAppState>()?._setThemeMode(themeMode);
+  }
+
   @override
   State<AligoApp> createState() => _AligoAppState();
 }
@@ -47,7 +54,9 @@ class AligoApp extends StatefulWidget {
 class _AligoAppState extends State<AligoApp> {
   final _localeStorage = LocaleStorage();
   final _sessionStorage = SessionStorage();
+  final _themeStorage = ThemeStorage();
   Locale? _locale;
+  ThemeMode _themeMode = ThemeMode.system;
   bool _checkedStoredLocale = false;
   Widget? _initialHome;
 
@@ -69,6 +78,17 @@ class _AligoAppState extends State<AligoApp> {
     final Locale? locale = code != null ? Locale(code) : null;
     if (locale != null) currentLocaleNotifier.value = locale;
 
+    String? themeModeName;
+    try {
+      themeModeName = await _themeStorage.readThemeMode();
+    } catch (_) {
+      themeModeName = null;
+    }
+    final ThemeMode themeMode = ThemeMode.values.firstWhere(
+      (mode) => mode.name == themeModeName,
+      orElse: () => ThemeMode.system,
+    );
+
     // Only bother resuming a session once a language is already chosen —
     // a brand-new install has no session to resume anyway.
     final Widget initialHome = locale == null
@@ -78,6 +98,7 @@ class _AligoAppState extends State<AligoApp> {
     if (!mounted) return;
     setState(() {
       _locale = locale;
+      _themeMode = themeMode;
       _checkedStoredLocale = true;
       _initialHome = initialHome;
     });
@@ -114,6 +135,10 @@ class _AligoAppState extends State<AligoApp> {
     setState(() => _locale = locale);
   }
 
+  void _setThemeMode(ThemeMode themeMode) {
+    setState(() => _themeMode = themeMode);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -121,7 +146,7 @@ class _AligoAppState extends State<AligoApp> {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.system,
+      themeMode: _themeMode,
       locale: _locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

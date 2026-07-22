@@ -556,6 +556,30 @@ abstract class AppLocalizations {
   /// **'Language'**
   String get language;
 
+  /// No description provided for @appearanceSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearanceSectionTitle;
+
+  /// No description provided for @themeSystemLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get themeSystemLabel;
+
+  /// No description provided for @themeLightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLightLabel;
+
+  /// No description provided for @themeDarkLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDarkLabel;
+
   /// No description provided for @postShipmentTitle.
   ///
   /// In en, this message translates to:

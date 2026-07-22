@@ -15,6 +15,7 @@ import '../cargo/my_shipments_screen.dart';
 import '../cargo/nearby_loads_screen.dart';
 import '../cargo/post_listing_screen.dart';
 import '../language/language_picker_screen.dart';
+import '../settings/settings_screen.dart';
 import '../settings/telegram_link_screen.dart';
 
 /// Hub screen of the Aligo app: a live tracking map with a floating
@@ -278,11 +279,7 @@ class _AligoDrawer extends StatelessWidget {
             CircleAvatar(
               radius: 32,
               backgroundColor: AppColors.slate,
-              child: const Icon(
-                Icons.person,
-                color: AppColors.amber,
-                size: 32,
-              ),
+              child: const Icon(Icons.person, color: AppColors.amber, size: 32),
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
@@ -359,6 +356,14 @@ class _AligoDrawer extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.settings_outlined),
               title: Text(l10n.settings),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const SettingsScreen(),
+                  ),
+                );
+              },
             ),
           ],
         ),

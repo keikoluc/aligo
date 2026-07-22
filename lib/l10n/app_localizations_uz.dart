@@ -248,6 +248,18 @@ class AppLocalizationsUz extends AppLocalizations {
   String get language => 'Til';
 
   @override
+  String get appearanceSectionTitle => 'Ko\'rinish';
+
+  @override
+  String get themeSystemLabel => 'Tizim standarti';
+
+  @override
+  String get themeLightLabel => 'Yorug\'';
+
+  @override
+  String get themeDarkLabel => 'Qorong\'u';
+
+  @override
   String get postShipmentTitle => 'Yuk joylash';
 
   @override

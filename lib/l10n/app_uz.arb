@@ -85,6 +85,10 @@
   "support": "Yordam",
   "settings": "Sozlamalar",
   "language": "Til",
+  "appearanceSectionTitle": "Ko'rinish",
+  "themeSystemLabel": "Tizim standarti",
+  "themeLightLabel": "Yorug'",
+  "themeDarkLabel": "Qorong'u",
 
   "postShipmentTitle": "Yuk joylash",
   "whatAreYouSending": "Nima yubormoqchisiz?",

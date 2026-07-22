@@ -85,6 +85,10 @@
   "support": "Поддержка",
   "settings": "Настройки",
   "language": "Язык",
+  "appearanceSectionTitle": "Оформление",
+  "themeSystemLabel": "Как в системе",
+  "themeLightLabel": "Светлая",
+  "themeDarkLabel": "Тёмная",
 
   "postShipmentTitle": "Разместить груз",
   "whatAreYouSending": "Что вы отправляете?",

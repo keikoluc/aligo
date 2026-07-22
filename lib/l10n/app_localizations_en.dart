@@ -247,6 +247,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get language => 'Language';
 
   @override
+  String get appearanceSectionTitle => 'Appearance';
+
+  @override
+  String get themeSystemLabel => 'System default';
+
+  @override
+  String get themeLightLabel => 'Light';
+
+  @override
+  String get themeDarkLabel => 'Dark';
+
+  @override
   String get postShipmentTitle => 'Post a shipment';
 
   @override

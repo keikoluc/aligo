@@ -91,6 +91,10 @@
   "support": "Support",
   "settings": "Settings",
   "language": "Language",
+  "appearanceSectionTitle": "Appearance",
+  "themeSystemLabel": "System default",
+  "themeLightLabel": "Light",
+  "themeDarkLabel": "Dark",
 
   "postShipmentTitle": "Post a shipment",
   "whatAreYouSending": "What are you sending?",
