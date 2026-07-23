@@ -26,7 +26,7 @@
           <span id="theme-icon">🌙</span>
         </button>
         <a class="btn btn-ghost" id="download-link-nav" href="/download/" data-i18n="downloadApk">APK yuklab olish</a>
-        <a class="btn btn-primary" href="/app/" data-i18n="loginBtn">Kirish</a>
+        <button class="btn btn-primary js-login-trigger" type="button" data-i18n="loginBtn">Kirish</button>
       </div>
       <button class="nav-burger" id="nav-burger" type="button" aria-label="Menyu">☰</button>
     </div>
@@ -42,7 +42,7 @@
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary btn-lg" href="/download/" data-i18n="downloadApk">APK yuklab olish</a>
-          <a class="btn btn-outline btn-lg" href="/app/" data-i18n="heroCtaSecondary">Hisobga kirish</a>
+          <button class="btn btn-outline btn-lg js-login-trigger" type="button" data-i18n="heroCtaSecondary">Hisobga kirish</button>
         </div>
       </div>
     </section>
@@ -183,6 +183,47 @@
     </div>
     <p class="footer-copyright"><span id="footer-year"></span> Aligo. <span data-i18n="allRightsReserved">Barcha huquqlar himoyalangan.</span></p>
   </footer>
+
+  <div class="modal-overlay" id="login-overlay" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
+      <button class="modal-close" id="login-close" type="button" aria-label="Yopish">✕</button>
+
+      <div class="modal-step" id="step-email">
+        <img src="assets/aligo_wordmark.png" alt="Aligo" class="modal-logo" />
+        <h2 id="login-modal-title" data-i18n="loginWelcomeTitle">Aligo'ga xush kelibsiz</h2>
+        <p data-i18n="loginWelcomeSubtitle">Kirish uchun sizga bir martalik kod yuboramiz.</p>
+        <div class="field">
+          <label data-i18n="emailLabel">Email manzil</label>
+          <input id="login-email" type="email" placeholder="siz@misol.com" autocomplete="email" />
+        </div>
+        <div class="field">
+          <label data-i18n="fullNameLabel">To'liq ism (ixtiyoriy)</label>
+          <input id="login-fullname" type="text" data-i18n-placeholder="fullNamePlaceholder" placeholder="Jasur Karimov" autocomplete="name" />
+        </div>
+        <button class="btn btn-primary btn-lg" id="login-send-otp" data-i18n="continueWithEmail">Email orqali davom etish</button>
+        <p class="modal-error" id="login-email-error" hidden></p>
+      </div>
+
+      <div class="modal-step" id="step-otp" hidden>
+        <h2 data-i18n="otpTitle">Emailingizni tasdiqlang</h2>
+        <p id="otp-subtitle" data-i18n="otpSubtitle">Yuborilgan 6 xonali kodni kiriting.</p>
+        <div class="field">
+          <label data-i18n="codeLabel">Kod</label>
+          <input id="login-code" type="text" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="one-time-code" />
+        </div>
+        <button class="btn btn-primary btn-lg" id="login-verify-otp" data-i18n="verifyAndContinue">Tasdiqlash va davom etish</button>
+        <button class="modal-link" id="login-resend" type="button" data-i18n="resendCode">Kod kelmadimi? Qayta yuborish</button>
+        <p class="modal-error" id="login-otp-error" hidden></p>
+      </div>
+
+      <div class="modal-step" id="step-success" hidden>
+        <div class="modal-success-icon">✅</div>
+        <h2 data-i18n="loginSuccessTitle">Kirdingiz!</h2>
+        <p id="login-success-body" data-i18n="loginSuccessBody">Endi ilovaga o'ting.</p>
+        <a class="btn btn-primary btn-lg" href="/app/" data-i18n="openAppButton">Ilovaga o'tish</a>
+      </div>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>

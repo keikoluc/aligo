@@ -160,6 +160,41 @@
     amenitySideRearTent: { uz: 'Yon/orqa tent', ru: 'Боковой/задний тент', en: 'Side/rear tent' },
     amenityLift: { uz: 'Lift', ru: 'Лифт', en: 'Lift' },
     amenityTieDownStraps: { uz: "Bog'lash tasmalari", ru: 'Стяжные ремни', en: 'Tie-down straps' },
+    // Login modal — mirrors lib/screens/auth/{login,otp}_screen.dart's
+    // copy/tone so it feels consistent with the app.
+    loginWelcomeTitle: { uz: "Aligo'ga xush kelibsiz", ru: 'Добро пожаловать в Aligo', en: 'Welcome to Aligo' },
+    loginWelcomeSubtitle: {
+      uz: 'Kirish uchun sizga bir martalik kod yuboramiz.',
+      ru: 'Отправим вам одноразовый код для входа.',
+      en: "We'll email you a one-time code to sign in.",
+    },
+    emailLabel: { uz: 'Email manzil', ru: 'Email адрес', en: 'Email address' },
+    fullNameLabel: { uz: "To'liq ism (ixtiyoriy)", ru: 'Полное имя (необязательно)', en: 'Full name (optional)' },
+    fullNamePlaceholder: { uz: 'Jasur Karimov', ru: 'Жасур Каримов', en: 'Jasur Karimov' },
+    continueWithEmail: { uz: 'Email orqali davom etish', ru: 'Продолжить через email', en: 'Continue with email' },
+    otpTitle: { uz: 'Emailingizni tasdiqlang', ru: 'Подтвердите email', en: 'Verify your email' },
+    otpSubtitle: {
+      uz: '{email} manziliga 6 xonali tasdiqlash kodi yuborildi.',
+      ru: 'На {email} отправлен 6-значный код подтверждения.',
+      en: 'We emailed a 6-digit verification code to {email}.',
+    },
+    codeLabel: { uz: 'Kod', ru: 'Код', en: 'Code' },
+    verifyAndContinue: { uz: 'Tasdiqlash va davom etish', ru: 'Подтвердить и продолжить', en: 'Verify & continue' },
+    resendCode: { uz: 'Kod kelmadimi? Qayta yuborish', ru: 'Не пришёл код? Отправить снова', en: "Didn't get a code? Resend" },
+    resendSending: { uz: 'Yuborilmoqda...', ru: 'Отправка...', en: 'Sending...' },
+    resendSent: { uz: 'Yangi kod yuborildi.', ru: 'Новый код отправлен.', en: 'A new code has been sent.' },
+    loginSuccessTitle: { uz: 'Kirdingiz!', ru: 'Вы вошли!', en: "You're in!" },
+    loginSuccessBody: {
+      uz: 'Endi Aligo ilovasida davom eting.',
+      ru: 'Теперь продолжите в приложении Aligo.',
+      en: 'Now continue in the Aligo app.',
+    },
+    openAppButton: { uz: 'Ilovaga o\'tish', ru: 'Перейти в приложение', en: 'Open the app' },
+    loginEmailRequired: {
+      uz: "To'g'ri email manzil kiriting.",
+      ru: 'Введите корректный email.',
+      en: 'Enter a valid email address.',
+    },
   };
 
   function t(key) {
@@ -191,6 +226,10 @@
     document.getElementById('lang-toggle').textContent = LANG.toUpperCase();
     renderCargoTypeOptions();
     renderFeatureCheckboxes();
+    // otpSubtitle has a {email} placeholder the generic data-i18n loop
+    // above can't fill in — re-render it with the email already in
+    // progress, if the login modal is mid-flow when the language changes.
+    if (typeof loginEmail !== 'undefined' && loginEmail) updateOtpSubtitle();
   }
 
   function renderCargoTypeOptions() {
@@ -359,6 +398,130 @@
       errorEl.hidden = false;
     } finally {
       btn.disabled = false;
+    }
+  });
+
+  // ---------- Login / register modal ----------
+  // Single email(+optional name)-then-code flow, same as
+  // POST /api/auth/otp/send + /verify already used by the Flutter app
+  // and the Telegram Mini App — this modal is just a third client for
+  // the same backend endpoints, not a separate auth system.
+
+  const overlay = document.getElementById('login-overlay');
+  const stepEmail = document.getElementById('step-email');
+  const stepOtp = document.getElementById('step-otp');
+  const stepSuccess = document.getElementById('step-success');
+  let loginEmail = '';
+
+  function showStep(step) {
+    stepEmail.hidden = step !== 'email';
+    stepOtp.hidden = step !== 'otp';
+    stepSuccess.hidden = step !== 'success';
+  }
+
+  function updateOtpSubtitle() {
+    document.getElementById('otp-subtitle').textContent = t('otpSubtitle').replace('{email}', loginEmail);
+  }
+
+  function openLoginModal() {
+    overlay.hidden = false;
+    showStep('email');
+    document.getElementById('login-email-error').hidden = true;
+    document.getElementById('login-otp-error').hidden = true;
+  }
+  function closeLoginModal() {
+    overlay.hidden = true;
+  }
+
+  document.querySelectorAll('.js-login-trigger').forEach((btn) => {
+    btn.addEventListener('click', openLoginModal);
+  });
+  document.getElementById('login-close').addEventListener('click', closeLoginModal);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeLoginModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !overlay.hidden) closeLoginModal();
+  });
+
+  async function sendOtp(email) {
+    const res = await fetch(`${API_BASE}/api/auth/otp/send`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-App-Locale': LANG },
+      body: JSON.stringify({ email }),
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.error || t('calcGenericError'));
+  }
+
+  document.getElementById('login-send-otp').addEventListener('click', async () => {
+    const email = document.getElementById('login-email').value.trim();
+    const errorEl = document.getElementById('login-email-error');
+    errorEl.hidden = true;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errorEl.textContent = t('loginEmailRequired');
+      errorEl.hidden = false;
+      return;
+    }
+    const btn = document.getElementById('login-send-otp');
+    btn.disabled = true;
+    try {
+      await sendOtp(email);
+      loginEmail = email;
+      updateOtpSubtitle();
+      document.getElementById('login-code').value = '';
+      showStep('otp');
+    } catch (err) {
+      errorEl.textContent = err.message;
+      errorEl.hidden = false;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  document.getElementById('login-verify-otp').addEventListener('click', async () => {
+    const code = document.getElementById('login-code').value.trim();
+    const fullName = document.getElementById('login-fullname').value.trim();
+    const errorEl = document.getElementById('login-otp-error');
+    errorEl.hidden = true;
+    const btn = document.getElementById('login-verify-otp');
+    btn.disabled = true;
+    try {
+      const res = await fetch(`${API_BASE}/api/auth/otp/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-App-Locale': LANG },
+        body: JSON.stringify({ email: loginEmail, code, fullName: fullName || undefined }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || t('calcGenericError'));
+
+      const name = body.user && (body.user.fullName || body.user.email);
+      document.getElementById('login-success-body').textContent = name
+        ? `${t('loginSuccessBody')} (${name})`
+        : t('loginSuccessBody');
+      showStep('success');
+    } catch (err) {
+      errorEl.textContent = err.message;
+      errorEl.hidden = false;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  document.getElementById('login-resend').addEventListener('click', async (e) => {
+    const link = e.currentTarget;
+    link.disabled = true;
+    link.textContent = t('resendSending');
+    try {
+      await sendOtp(loginEmail);
+      link.textContent = t('resendSent');
+    } catch {
+      link.textContent = t('resendCode');
+    } finally {
+      link.disabled = false;
+      setTimeout(() => {
+        if (!overlay.hidden) link.textContent = t('resendCode');
+      }, 2500);
     }
   });
 
