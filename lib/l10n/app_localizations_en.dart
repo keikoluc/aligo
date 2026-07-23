@@ -578,4 +578,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get getAndroidApp => 'Get the Android app';
+
+  @override
+  String get logout => 'Log out';
+
+  @override
+  String get logoutConfirmText => 'Are you sure you want to log out?';
 }

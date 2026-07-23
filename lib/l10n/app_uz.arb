@@ -203,5 +203,8 @@
   },
   "updateDownloadButton": "Yuklab olish",
 
-  "getAndroidApp": "Android ilovasini yuklab olish"
+  "getAndroidApp": "Android ilovasini yuklab olish",
+
+  "logout": "Chiqish",
+  "logoutConfirmText": "Hisobdan chiqishni xohlaysizmi?"
 }

@@ -582,4 +582,10 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get getAndroidApp => 'Android ilovasini yuklab olish';
+
+  @override
+  String get logout => 'Chiqish';
+
+  @override
+  String get logoutConfirmText => 'Hisobdan chiqishni xohlaysizmi?';
 }

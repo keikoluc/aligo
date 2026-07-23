@@ -2,20 +2,25 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/config/app_config.dart';
+import '../../core/current_locale.dart';
+import '../../core/current_theme_mode.dart';
 import '../../core/network/app_version_api.dart';
 import '../../core/network/push_service.dart';
+import '../../core/storage/locale_storage.dart';
+import '../../core/storage/session_storage.dart';
+import '../../core/storage/theme_storage.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../l10n/app_localizations.dart';
+import '../../main.dart';
 import '../../models/user_model.dart';
 import '../../widgets/aligo_map_view.dart';
 import '../../widgets/destination_search_bar.dart';
+import '../auth/login_screen.dart';
 import '../cargo/my_deliveries_screen.dart';
 import '../cargo/my_shipments_screen.dart';
 import '../cargo/nearby_loads_screen.dart';
 import '../cargo/post_listing_screen.dart';
-import '../language/language_picker_screen.dart';
-import '../settings/settings_screen.dart';
 import '../settings/telegram_link_screen.dart';
 
 /// Hub screen of the Aligo app: a live tracking map with a floating
@@ -81,12 +86,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     horizontal: AppSpacing.md,
                     vertical: AppSpacing.sm,
                   ),
-                  child: DestinationSearchBar(
-                    onTap: _openRoleAction,
-                    onMenuTap: () => Scaffold.of(scaffoldContext).openDrawer(),
-                    hintText: _isShipper
-                        ? AppLocalizations.of(context)!.whereToSendCargo
-                        : AppLocalizations.of(context)!.findNearbyLoads,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: DestinationSearchBar(
+                          onTap: _openRoleAction,
+                          onMenuTap: () =>
+                              Scaffold.of(scaffoldContext).openDrawer(),
+                          hintText: _isShipper
+                              ? AppLocalizations.of(context)!.whereToSendCargo
+                              : AppLocalizations.of(context)!.findNearbyLoads,
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      const _ThemeQuickToggle(),
+                      const SizedBox(width: AppSpacing.sm),
+                      const _LanguageQuickToggle(),
+                    ],
                   ),
                 ),
               ),
@@ -328,19 +344,6 @@ class _AligoDrawer extends StatelessWidget {
               title: Text(l10n.support),
             ),
             ListTile(
-              leading: const Icon(Icons.language),
-              title: Text(l10n.language),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) =>
-                        const LanguagePickerScreen(isInitialSetup: false),
-                  ),
-                );
-              },
-            ),
-            ListTile(
               leading: const Icon(Icons.send),
               title: Text(l10n.telegramTitle),
               onTap: () {
@@ -353,21 +356,158 @@ class _AligoDrawer extends StatelessWidget {
                 );
               },
             ),
+            const Divider(height: AppSpacing.xl),
             ListTile(
-              leading: const Icon(Icons.settings_outlined),
-              title: Text(l10n.settings),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => const SettingsScreen(),
-                  ),
-                );
-              },
+              leading: Icon(Icons.logout, color: Theme.of(context).colorScheme.error),
+              title: Text(
+                l10n.logout,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
+              onTap: () => _confirmLogout(context, l10n),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _confirmLogout(BuildContext context, AppLocalizations l10n) async {
+    final bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.logout),
+        content: Text(l10n.logoutConfirmText),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(MaterialLocalizations.of(dialogContext).cancelButtonLabel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(
+              l10n.logout,
+              style: TextStyle(color: Theme.of(dialogContext).colorScheme.error),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+
+    await SessionStorage().clear();
+    if (!context.mounted) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute<void>(builder: (_) => const LoginScreen()),
+      (route) => false,
+    );
+  }
+}
+
+/// Small circular button on the home top bar that cycles the app's
+/// appearance (system → light → dark → …) in a single tap, instead of
+/// sending the user to a dedicated settings screen for it.
+class _ThemeQuickToggle extends StatelessWidget {
+  const _ThemeQuickToggle();
+
+  static const List<ThemeMode> _cycle = [
+    ThemeMode.system,
+    ThemeMode.light,
+    ThemeMode.dark,
+  ];
+
+  IconData _iconFor(ThemeMode mode) {
+    switch (mode) {
+      case ThemeMode.light:
+        return Icons.light_mode_outlined;
+      case ThemeMode.dark:
+        return Icons.dark_mode_outlined;
+      case ThemeMode.system:
+        return Icons.brightness_auto_outlined;
+    }
+  }
+
+  Future<void> _cycleTheme(BuildContext context, ThemeMode current) async {
+    final ThemeMode next = _cycle[(_cycle.indexOf(current) + 1) % _cycle.length];
+    await ThemeStorage().saveThemeMode(next.name);
+    if (!context.mounted) return;
+    AligoApp.setThemeMode(context, next);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color surface = isDark ? AppColors.surfaceDark : AppColors.white;
+
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: currentThemeModeNotifier,
+      builder: (context, mode, _) {
+        return Material(
+          color: surface,
+          shape: const CircleBorder(),
+          elevation: 6,
+          shadowColor: Colors.black.withValues(alpha: 0.15),
+          child: InkWell(
+            customBorder: const CircleBorder(),
+            onTap: () => _cycleTheme(context, mode),
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Icon(
+                _iconFor(mode),
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Small circular button on the home top bar that cycles the app's
+/// language (uz → ru → en → …) in a single tap, instead of sending the
+/// user to a dedicated language picker screen for it.
+class _LanguageQuickToggle extends StatelessWidget {
+  const _LanguageQuickToggle();
+
+  static const List<String> _cycle = ['uz', 'ru', 'en'];
+
+  Future<void> _cycleLanguage(BuildContext context, Locale current) async {
+    final int index = _cycle.indexOf(current.languageCode);
+    final String next = _cycle[(index + 1) % _cycle.length];
+    await LocaleStorage().saveLanguageCode(next);
+    if (!context.mounted) return;
+    AligoApp.setLocale(context, Locale(next));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color surface = isDark ? AppColors.surfaceDark : AppColors.white;
+
+    return ValueListenableBuilder<Locale>(
+      valueListenable: currentLocaleNotifier,
+      builder: (context, locale, _) {
+        return Material(
+          color: surface,
+          shape: const CircleBorder(),
+          elevation: 6,
+          shadowColor: Colors.black.withValues(alpha: 0.15),
+          child: InkWell(
+            customBorder: const CircleBorder(),
+            onTap: () => _cycleLanguage(context, locale),
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Text(
+                locale.languageCode.toUpperCase(),
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

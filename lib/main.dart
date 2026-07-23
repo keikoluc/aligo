@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'core/config/app_config.dart';
 import 'core/current_locale.dart';
+import 'core/current_theme_mode.dart';
 import 'core/network/profile_api.dart';
 import 'core/storage/locale_storage.dart';
 import 'core/storage/session_storage.dart';
@@ -88,6 +89,7 @@ class _AligoAppState extends State<AligoApp> {
       (mode) => mode.name == themeModeName,
       orElse: () => ThemeMode.system,
     );
+    currentThemeModeNotifier.value = themeMode;
 
     // Only bother resuming a session once a language is already chosen —
     // a brand-new install has no session to resume anyway.
@@ -136,6 +138,7 @@ class _AligoAppState extends State<AligoApp> {
   }
 
   void _setThemeMode(ThemeMode themeMode) {
+    currentThemeModeNotifier.value = themeMode;
     setState(() => _themeMode = themeMode);
   }
 

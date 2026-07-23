@@ -577,4 +577,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get getAndroidApp => 'Скачать приложение для Android';
+
+  @override
+  String get logout => 'Выйти';
+
+  @override
+  String get logoutConfirmText => 'Выйти из аккаунта?';
 }

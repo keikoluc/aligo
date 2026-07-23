@@ -16,13 +16,10 @@ const List<(String code, String flag)> _languages = [
 ];
 
 /// Shown once on first launch so the user picks their app language
-/// before anything else, and reachable again later from the home
-/// drawer to change it. On first launch, confirming moves on to
-/// [LoginScreen]; when reopened later, confirming just pops back.
+/// before anything else. Confirming moves on to [LoginScreen]. (Changing
+/// the language later happens via the quick toggle on the home screen.)
 class LanguagePickerScreen extends StatefulWidget {
-  final bool isInitialSetup;
-
-  const LanguagePickerScreen({super.key, this.isInitialSetup = true});
+  const LanguagePickerScreen({super.key});
 
   @override
   State<LanguagePickerScreen> createState() => _LanguagePickerScreenState();
@@ -47,13 +44,9 @@ class _LanguagePickerScreenState extends State<LanguagePickerScreen> {
     await _localeStorage.saveLanguageCode(_selected);
     if (!mounted) return;
     AligoApp.setLocale(context, Locale(_selected));
-    if (widget.isInitialSetup) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute<void>(builder: (_) => const LoginScreen()),
-      );
-    } else {
-      Navigator.of(context).pop();
-    }
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute<void>(builder: (_) => const LoginScreen()),
+    );
   }
 
   @override
@@ -68,9 +61,6 @@ class _LanguagePickerScreenState extends State<LanguagePickerScreen> {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: widget.isInitialSetup
-          ? null
-          : AppBar(title: Text(l10n.language)),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {

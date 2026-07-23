@@ -240,5 +240,8 @@
   },
   "updateDownloadButton": "Download",
 
-  "getAndroidApp": "Get the Android app"
+  "getAndroidApp": "Get the Android app",
+
+  "logout": "Log out",
+  "logoutConfirmText": "Are you sure you want to log out?"
 }

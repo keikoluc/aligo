@@ -203,5 +203,8 @@
   },
   "updateDownloadButton": "Скачать",
 
-  "getAndroidApp": "Скачать приложение для Android"
+  "getAndroidApp": "Скачать приложение для Android",
+
+  "logout": "Выйти",
+  "logoutConfirmText": "Выйти из аккаунта?"
 }

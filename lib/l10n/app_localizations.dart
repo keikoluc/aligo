@@ -1173,6 +1173,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Get the Android app'**
   String get getAndroidApp;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get logout;
+
+  /// No description provided for @logoutConfirmText.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to log out?'**
+  String get logoutConfirmText;
 }
 
 class _AppLocalizationsDelegate
