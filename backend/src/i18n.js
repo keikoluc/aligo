@@ -223,6 +223,10 @@ const TRANSLATIONS = {
     uz: "Qo'llab-quvvatlanmaydigan til.",
     ru: 'Неподдерживаемый язык.',
   },
+  'Too many requests. Please try again later.': {
+    uz: "Juda ko'p so'rov. Keyinroq qayta urinib ko'ring.",
+    ru: 'Слишком много запросов. Попробуйте позже.',
+  },
 };
 
 const SUPPORTED_LOCALES = ['uz', 'ru', 'en'];

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aligo — O'zbekiston bo'ylab yuk tashish xizmati</title>
+<meta name="description" content="Aligo — yuk jo'natuvchilar va haydovchilarni bir platformada birlashtiruvchi, jonli kuzatuv va shaffof narxlashga ega yuk tashish xizmati." />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top">
+        <img src="assets/aligo_wordmark.png" alt="Aligo" class="brand-logo" />
+      </a>
+      <nav class="site-nav" id="site-nav">
+        <a href="#about" data-i18n="navAbout">Biz haqimizda</a>
+        <a href="#how-it-works" data-i18n="navHow">Qanday ishlaydi</a>
+        <a href="#calculator" data-i18n="navCalculator">Narxni hisoblash</a>
+        <a href="#contact" data-i18n="navContact">Aloqa</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-toggle" id="lang-toggle" type="button" aria-label="Tilni almashtirish">UZ</button>
+        <button class="icon-toggle" id="theme-toggle" type="button" aria-label="Ko'rinishni almashtirish">
+          <span id="theme-icon">🌙</span>
+        </button>
+        <a class="btn btn-ghost" id="download-link-nav" href="/download/" data-i18n="downloadApk">APK yuklab olish</a>
+        <a class="btn btn-primary" href="/app/" data-i18n="loginBtn">Kirish</a>
+      </div>
+      <button class="nav-burger" id="nav-burger" type="button" aria-label="Menyu">☰</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-inner">
+        <h1 data-i18n="heroTitle">O'zbekiston bo'ylab yuk tashish endi bir necha bosishda</h1>
+        <p class="hero-subtitle" data-i18n="heroSubtitle">
+          Aligo yuk jo'natuvchilarni va haydovchilarni bitta platformada birlashtiradi: yukingizni joylang, mos
+          haydovchi qabul qilsin, yetkazib berishni jonli kuzating.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary btn-lg" href="/download/" data-i18n="downloadApk">APK yuklab olish</a>
+          <a class="btn btn-outline btn-lg" href="/app/" data-i18n="heroCtaSecondary">Hisobga kirish</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <h2 data-i18n="aboutTitle">Biz haqimizda</h2>
+      <p class="section-subtitle" data-i18n="aboutSubtitle">
+        Aligo — jo'natuvchilar va haydovchilarni bog'laydigan yuk tashish platformasi.
+      </p>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📦</div>
+          <h3 data-i18n="feature1Title">Mos haydovchi tanlanadi</h3>
+          <p data-i18n="feature1Body">
+            Yukni turi va manzillari bilan joylang — kerakli uskunaga (muzlatgich, tent, lift, bog'lash
+            tasmalari) ega haydovchilargina uni qabul qila oladi.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📍</div>
+          <h3 data-i18n="feature2Title">Jonli kuzatuv</h3>
+          <p data-i18n="feature2Body">
+            Yuklash va yetkazib berish davomida haydovchining joylashuvi real vaqtda xaritada ko'rsatiladi.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💰</div>
+          <h3 data-i18n="feature3Title">Shaffof narxlash</h3>
+          <p data-i18n="feature3Body">
+            Masofa va yuk turiga qarab taxminiy narx avtomatik hisoblanadi — qo'shimcha xizmatlar narxi ham
+            oldindan ko'rinadi.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⭐</div>
+          <h3 data-i18n="feature4Title">Baholash tizimi</h3>
+          <p data-i18n="feature4Body">
+            Yetkazib berish tugagach, jo'natuvchi va haydovchi bir-birini baholaydi.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="how-it-works">
+      <h2 data-i18n="howTitle">Qanday ishlaydi</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3 data-i18n="step1Title">Yuk joylang</h3>
+          <p data-i18n="step1Body">Manzil, yuk turi va narxni kiriting.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3 data-i18n="step2Title">Haydovchi qabul qiladi</h3>
+          <p data-i18n="step2Body">Mos transportga ega haydovchi yukni qabul qiladi.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3 data-i18n="step3Title">Jonli kuzating</h3>
+          <p data-i18n="step3Body">Yuklash va yetkazib berish jarayonini xaritada kuzating.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3 data-i18n="step4Title">Baholang</h3>
+          <p data-i18n="step4Body">Yetkazib berilgach, tajribangizni baholang.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="calculator">
+      <h2 data-i18n="calcTitle">Narxni hisoblash</h2>
+      <p class="section-subtitle" data-i18n="calcSubtitle">
+        Taxminiy narxni bilish uchun manzillar va yuk turini tanlang.
+      </p>
+      <div class="calc-card">
+        <div class="calc-grid">
+          <div class="field">
+            <label data-i18n="pickupLabel">Qayerdan</label>
+            <input id="pickup-search" type="text" data-i18n-placeholder="searchAddress" placeholder="Manzil qidirish..." autocomplete="off" />
+            <div class="suggestions" id="pickup-suggestions" hidden></div>
+          </div>
+          <div class="field">
+            <label data-i18n="dropoffLabel">Qayerga</label>
+            <input id="dropoff-search" type="text" data-i18n-placeholder="searchAddress" placeholder="Manzil qidirish..." autocomplete="off" />
+            <div class="suggestions" id="dropoff-suggestions" hidden></div>
+          </div>
+          <div class="field">
+            <label data-i18n="cargoType">Yuk turi</label>
+            <select id="cargo-type"></select>
+          </div>
+        </div>
+        <div class="field">
+          <label data-i18n="specialRequirements">Qo'shimcha talablar</label>
+          <div id="features" class="features-list"></div>
+        </div>
+        <button class="btn btn-primary btn-lg" id="calc-btn" data-i18n="calcButton">Hisoblash</button>
+        <div class="calc-result" id="calc-result" hidden>
+          <div class="calc-result-row">
+            <span data-i18n="calcDistance">Masofa</span>
+            <strong id="calc-distance">—</strong>
+          </div>
+          <div class="calc-result-row">
+            <span data-i18n="calcDuration">Taxminiy vaqt</span>
+            <strong id="calc-duration">—</strong>
+          </div>
+          <div class="calc-result-row calc-result-price">
+            <span data-i18n="calcPrice">Taxminiy narx</span>
+            <strong id="calc-price">—</strong>
+          </div>
+          <p class="calc-note" data-i18n="calcNote">
+            Bu taxminiy narx. Ilovada yuk joylaganda narxni o'zingiz belgilashingiz mumkin.
+          </p>
+        </div>
+        <p class="calc-error" id="calc-error" hidden></p>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="download">
+      <div class="download-strip">
+        <div>
+          <h2 data-i18n="downloadTitle">Aligo ilovasini yuklab oling</h2>
+          <p data-i18n="downloadBody">Android uchun (arm64 qurilmalar, 2018-yildan keyingi deyarli barcha telefonlar).</p>
+        </div>
+        <a class="btn btn-primary btn-lg" href="/download/" data-i18n="downloadApk">APK yuklab olish</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-inner">
+      <img src="assets/aligo_wordmark.png" alt="Aligo" class="footer-logo" />
+      <div class="footer-contacts">
+        <h3 data-i18n="contactTitle">Aloqa</h3>
+        <a href="https://t.me/Aligoo_Logistic_bot" target="_blank" rel="noopener">Telegram: @Aligoo_Logistic_bot</a>
+        <a href="tel:+998943191317">+998 94 319 31 17</a>
+        <a href="mailto:2401044j@jdu.uz">2401044j@jdu.uz</a>
+      </div>
+    </div>
+    <p class="footer-copyright"><span id="footer-year"></span> Aligo. <span data-i18n="allRightsReserved">Barcha huquqlar himoyalangan.</span></p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

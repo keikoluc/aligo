@@ -1,4 +1,5 @@
 const express = require('express');
+const { rateLimit, ipKeyGenerator } = require('express-rate-limit');
 
 const { requireAuth } = require('../middleware/auth');
 const cargoListingService = require('../services/cargoListingService');
@@ -7,6 +8,19 @@ const userService = require('../services/userService');
 const { t } = require('../i18n');
 
 const router = express.Router();
+
+// Anonymous visitors on the public landing page (landing/app.js) can
+// tweak the calculator's inputs a few times per visit; this just bounds
+// how much anonymous traffic can drive calls to the metered Mapbox
+// Directions API via pricingService.fetchRouteDistanceKm.
+const publicEstimateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 60,
+  keyGenerator: (req) => ipKeyGenerator(req.ip),
+  message: (req) => ({
+    error: t('Too many requests. Please try again later.', req.locale),
+  }),
+});
 
 async function requireRole(req, res, role) {
   const user = await userService.findById(req.userId);
@@ -37,10 +51,7 @@ function requiredFeaturesFromQuery(query) {
   };
 }
 
-router.get('/estimate', requireAuth, async (req, res) => {
-  const user = await requireRole(req, res, 'shipper');
-  if (!user) return;
-
+async function estimateHandler(req, res) {
   const { cargoType, pickupLat, pickupLng, dropoffLat, dropoffLng } = req.query;
 
   const pickup = { lat: parseCoord(pickupLat), lng: parseCoord(pickupLng) };
@@ -75,7 +86,18 @@ router.get('/estimate', requireAuth, async (req, res) => {
       .status(502)
       .json({ error: t('Could not estimate a price right now.', req.locale) });
   }
+}
+
+router.get('/estimate', requireAuth, async (req, res) => {
+  const user = await requireRole(req, res, 'shipper');
+  if (!user) return;
+  return estimateHandler(req, res);
 });
+
+// Unauthenticated equivalent of /estimate, for the public landing page's
+// price calculator (landing/app.js) — a visitor browsing aligoo.uz has
+// no session yet, so the shipper-only /estimate above is unusable there.
+router.get('/public-estimate', publicEstimateLimiter, estimateHandler);
 
 router.post('/', requireAuth, async (req, res) => {
   const user = await requireRole(req, res, 'shipper');

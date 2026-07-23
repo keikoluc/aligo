@@ -55,6 +55,33 @@ test('cargo routes require authentication', async () => {
   assert.equal(res.status, 401);
 });
 
+test('GET /api/cargo/public-estimate does not require authentication', async () => {
+  // helpers/testEnv.js deletes MAPBOX_ACCESS_TOKEN, so a route with valid
+  // params still can't produce a real price here — assert it gets past
+  // the auth/validation gates and fails at the Mapbox call instead of a
+  // 401, which is what actually distinguishes this route from /estimate.
+  const res = await request(app).get('/api/cargo/public-estimate').query({
+    cargoType: 'general',
+    pickupLat: '41.3',
+    pickupLng: '69.24',
+    dropoffLat: '41.33',
+    dropoffLng: '69.28',
+  });
+  assert.equal(res.status, 502);
+  assert.equal(res.body.error, 'Could not estimate a price right now.');
+});
+
+test('GET /api/cargo/public-estimate rejects missing coordinates with 400', async () => {
+  const res = await request(app)
+    .get('/api/cargo/public-estimate')
+    .query({ cargoType: 'general' });
+  assert.equal(res.status, 400);
+  assert.equal(
+    res.body.error,
+    'cargoType, pickup and dropoff coordinates are required.'
+  );
+});
+
 test('GET /api/cargo/nearby is forbidden for a shipper account', async () => {
   const { token } = await makeAuthedUser('shipper');
   const res = await request(app)
