@@ -4,6 +4,17 @@
 // than the API (api.aligoo.uz), so unlike the mini app it always uses
 // an absolute API_BASE rather than relative fetch paths.
 (function () {
+  // Defensive cleanup: the Flutter app used to live at "/" and could have
+  // left a service worker registered at this scope in a returning
+  // visitor's browser (see flutter_service_worker.js in this same
+  // folder, which is the primary fix — this just covers any other stale
+  // registration at "/" too).
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((regs) => {
+      regs.forEach((reg) => reg.unregister());
+    });
+  }
+
   const API_BASE = ['localhost', '127.0.0.1'].includes(location.hostname)
     ? 'http://localhost:4000'
     : 'https://api.aligoo.uz';
