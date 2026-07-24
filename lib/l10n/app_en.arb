@@ -24,21 +24,15 @@
   "orContinueWith": "or continue with",
   "google": "Google",
   "apple": "Apple",
-  "noAccountPrompt": "Don't have an account? ",
-  "createOne": "Create one",
   "invalidEmail": "Enter a valid email address",
   "googleSignInFailed": "Google sign-in failed: {error}",
   "@googleSignInFailed": {
     "placeholders": { "error": { "type": "String" } }
   },
 
-  "createAccountTitle": "Create your account",
-  "joinAligo": "Join Aligo",
-  "signupSubtitle": "We'll email you a verification code to confirm it's you.",
   "fullNameLabel": "Full name",
   "fullNameHint": "Jasur Karimov",
   "enterFullName": "Enter your full name",
-  "sendVerificationCode": "Send verification code",
 
   "verifyEmailTitle": "Verify your email",
   "enterCodeTitle": "Enter the code we sent",

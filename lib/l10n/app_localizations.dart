@@ -220,18 +220,6 @@ abstract class AppLocalizations {
   /// **'Apple'**
   String get apple;
 
-  /// No description provided for @noAccountPrompt.
-  ///
-  /// In en, this message translates to:
-  /// **'Don\'t have an account? '**
-  String get noAccountPrompt;
-
-  /// No description provided for @createOne.
-  ///
-  /// In en, this message translates to:
-  /// **'Create one'**
-  String get createOne;
-
   /// No description provided for @invalidEmail.
   ///
   /// In en, this message translates to:
@@ -243,24 +231,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Google sign-in failed: {error}'**
   String googleSignInFailed(String error);
-
-  /// No description provided for @createAccountTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Create your account'**
-  String get createAccountTitle;
-
-  /// No description provided for @joinAligo.
-  ///
-  /// In en, this message translates to:
-  /// **'Join Aligo'**
-  String get joinAligo;
-
-  /// No description provided for @signupSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'We\'ll email you a verification code to confirm it\'s you.'**
-  String get signupSubtitle;
 
   /// No description provided for @fullNameLabel.
   ///
@@ -279,12 +249,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter your full name'**
   String get enterFullName;
-
-  /// No description provided for @sendVerificationCode.
-  ///
-  /// In en, this message translates to:
-  /// **'Send verification code'**
-  String get sendVerificationCode;
 
   /// No description provided for @verifyEmailTitle.
   ///

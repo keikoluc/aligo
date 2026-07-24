@@ -13,14 +13,14 @@ import '../../widgets/google_logo.dart';
 import '../../widgets/primary_button.dart';
 import '../home/home_screen.dart';
 import '../onboarding/role_select_screen.dart';
-import 'email_signup_screen.dart';
 import 'otp_screen.dart';
 
-/// Production login surface for the Aligo logistics ecosystem.
+/// Production login/signup surface for the Aligo logistics ecosystem.
 ///
-/// Sign-in is email + one-time code, matching the registration flow:
-/// the same backend endpoint creates the account on first verify, so
-/// this screen never asks for a password.
+/// A single email (+ optional full name) then one-time-code flow: the
+/// same backend endpoint both signs in a returning user and creates a
+/// new account on first verify, so there's no separate password or
+/// signup screen to keep in sync with this one.
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -30,6 +30,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
 
   final _authApi = AuthApi();
@@ -40,6 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     super.dispose();
   }
@@ -61,10 +63,16 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isSubmitting = true);
     try {
       final String email = _emailController.text.trim();
+      final String fullName = _nameController.text.trim();
       await _authApi.sendOtp(email);
       if (!mounted) return;
       Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => OtpScreen(email: email)),
+        MaterialPageRoute<void>(
+          builder: (_) => OtpScreen(
+            email: email,
+            fullName: fullName.isEmpty ? null : fullName,
+          ),
+        ),
       );
     } on ApiException catch (e) {
       if (!mounted) return;
@@ -152,6 +160,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: AppSpacing.xl),
                         AppTextField(
+                          controller: _nameController,
+                          label: l10n.fullNameLabel,
+                          hint: l10n.fullNameHint,
+                          prefixIcon: Icons.person_outline,
+                          textCapitalization: TextCapitalization.words,
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        AppTextField(
                           controller: _emailController,
                           label: l10n.emailAddressLabel,
                           hint: l10n.emailAddressHint,
@@ -215,33 +231,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const Spacer(),
                         const SizedBox(height: AppSpacing.lg),
-                        Center(
-                          child: Wrap(
-                            alignment: WrapAlignment.center,
-                            children: [
-                              Text(
-                                l10n.noAccountPrompt,
-                                style: textTheme.bodyMedium,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute<void>(
-                                      builder: (_) => const EmailSignupScreen(),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  l10n.createOne,
-                                  style: textTheme.bodyMedium?.copyWith(
-                                    color: scheme.secondary,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                         if (kIsWeb) ...[
                           const SizedBox(height: AppSpacing.sm),
                           Center(

@@ -72,28 +72,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get apple => 'Apple';
 
   @override
-  String get noAccountPrompt => 'Don\'t have an account? ';
-
-  @override
-  String get createOne => 'Create one';
-
-  @override
   String get invalidEmail => 'Enter a valid email address';
 
   @override
   String googleSignInFailed(String error) {
     return 'Google sign-in failed: $error';
   }
-
-  @override
-  String get createAccountTitle => 'Create your account';
-
-  @override
-  String get joinAligo => 'Join Aligo';
-
-  @override
-  String get signupSubtitle =>
-      'We\'ll email you a verification code to confirm it\'s you.';
 
   @override
   String get fullNameLabel => 'Full name';
@@ -103,9 +87,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get enterFullName => 'Enter your full name';
-
-  @override
-  String get sendVerificationCode => 'Send verification code';
 
   @override
   String get verifyEmailTitle => 'Verify your email';

@@ -10,6 +10,7 @@ import 'core/storage/locale_storage.dart';
 import 'core/storage/session_storage.dart';
 import 'core/storage/theme_storage.dart';
 import 'core/theme/app_theme.dart';
+import 'core/web/session_handoff.dart';
 import 'l10n/app_localizations.dart';
 import 'models/user_model.dart';
 import 'screens/auth/login_screen.dart';
@@ -93,9 +94,21 @@ class _AligoAppState extends State<AligoApp> {
     );
     currentThemeModeNotifier.value = themeMode;
 
+    // A handoff token means the landing page's own login modal
+    // (aligoo.uz) already verified this user — save it before deciding
+    // where to send them, so opening /app/ signs them straight in
+    // instead of asking for email again.
+    final String? handoffToken = consumeHandoffToken();
+    if (handoffToken != null) {
+      await _sessionStorage.saveToken(handoffToken);
+    }
+
     // Only bother resuming a session once a language is already chosen —
-    // a brand-new install has no session to resume anyway.
-    final Widget initialHome = locale == null
+    // a brand-new install has no session to resume anyway. A handoff
+    // token skips the picker too, since it means there's a session to
+    // resume regardless; the app falls back to locale auto-resolution
+    // until the user picks one from the in-app language toggle.
+    final Widget initialHome = (locale == null && handoffToken == null)
         ? const LanguagePickerScreen()
         : await _resumeSession();
 

@@ -72,28 +72,12 @@ class AppLocalizationsUz extends AppLocalizations {
   String get apple => 'Apple';
 
   @override
-  String get noAccountPrompt => 'Hisobingiz yo\'qmi? ';
-
-  @override
-  String get createOne => 'Ro\'yxatdan o\'tish';
-
-  @override
   String get invalidEmail => 'To\'g\'ri email manzilini kiriting';
 
   @override
   String googleSignInFailed(String error) {
     return 'Google orqali kirish muvaffaqiyatsiz: $error';
   }
-
-  @override
-  String get createAccountTitle => 'Hisob yaratish';
-
-  @override
-  String get joinAligo => 'Aligo\'ga qo\'shiling';
-
-  @override
-  String get signupSubtitle =>
-      'Sizni tasdiqlash uchun email orqali tasdiqlash kodini yuboramiz.';
 
   @override
   String get fullNameLabel => 'To\'liq ism';
@@ -103,9 +87,6 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get enterFullName => 'To\'liq ismingizni kiriting';
-
-  @override
-  String get sendVerificationCode => 'Tasdiqlash kodini yuborish';
 
   @override
   String get verifyEmailTitle => 'Emailingizni tasdiqlang';

@@ -71,27 +71,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get apple => 'Apple';
 
   @override
-  String get noAccountPrompt => 'Нет аккаунта? ';
-
-  @override
-  String get createOne => 'Создать';
-
-  @override
   String get invalidEmail => 'Введите корректный email';
 
   @override
   String googleSignInFailed(String error) {
     return 'Не удалось войти через Google: $error';
   }
-
-  @override
-  String get createAccountTitle => 'Создать аккаунт';
-
-  @override
-  String get joinAligo => 'Присоединяйтесь к Aligo';
-
-  @override
-  String get signupSubtitle => 'Мы отправим вам код подтверждения на почту.';
 
   @override
   String get fullNameLabel => 'Полное имя';
@@ -101,9 +86,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get enterFullName => 'Введите ваше полное имя';
-
-  @override
-  String get sendVerificationCode => 'Отправить код подтверждения';
 
   @override
   String get verifyEmailTitle => 'Подтвердите email';

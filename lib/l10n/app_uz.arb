@@ -24,18 +24,12 @@
   "orContinueWith": "yoki davom eting",
   "google": "Google",
   "apple": "Apple",
-  "noAccountPrompt": "Hisobingiz yo'qmi? ",
-  "createOne": "Ro'yxatdan o'tish",
   "invalidEmail": "To'g'ri email manzilini kiriting",
   "googleSignInFailed": "Google orqali kirish muvaffaqiyatsiz: {error}",
 
-  "createAccountTitle": "Hisob yaratish",
-  "joinAligo": "Aligo'ga qo'shiling",
-  "signupSubtitle": "Sizni tasdiqlash uchun email orqali tasdiqlash kodini yuboramiz.",
   "fullNameLabel": "To'liq ism",
   "fullNameHint": "Jasur Karimov",
   "enterFullName": "To'liq ismingizni kiriting",
-  "sendVerificationCode": "Tasdiqlash kodini yuborish",
 
   "verifyEmailTitle": "Emailingizni tasdiqlang",
   "enterCodeTitle": "Yuborilgan kodni kiriting",

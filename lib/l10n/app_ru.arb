@@ -24,18 +24,12 @@
   "orContinueWith": "или продолжить с",
   "google": "Google",
   "apple": "Apple",
-  "noAccountPrompt": "Нет аккаунта? ",
-  "createOne": "Создать",
   "invalidEmail": "Введите корректный email",
   "googleSignInFailed": "Не удалось войти через Google: {error}",
 
-  "createAccountTitle": "Создать аккаунт",
-  "joinAligo": "Присоединяйтесь к Aligo",
-  "signupSubtitle": "Мы отправим вам код подтверждения на почту.",
   "fullNameLabel": "Полное имя",
   "fullNameHint": "Jasur Karimov",
   "enterFullName": "Введите ваше полное имя",
-  "sendVerificationCode": "Отправить код подтверждения",
 
   "verifyEmailTitle": "Подтвердите email",
   "enterCodeTitle": "Введите полученный код",

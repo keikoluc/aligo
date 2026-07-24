@@ -505,6 +505,10 @@
       document.getElementById('login-success-body').textContent = name
         ? `${t('loginSuccessBody')} (${name})`
         : t('loginSuccessBody');
+      // Hand the session off to the app instead of making it sign in
+      // again — it reads this token on launch and resumes the session.
+      document.getElementById('login-open-app').href =
+        `/app/?token=${encodeURIComponent(body.token)}`;
       showStep('success');
     } catch (err) {
       errorEl.textContent = err.message;
