@@ -454,7 +454,7 @@
     if (!res.ok) throw new Error(body.error || t('calcGenericError'));
   }
 
-  document.getElementById('login-send-otp').addEventListener('click', async () => {
+  async function submitEmailStep() {
     const email = document.getElementById('login-email').value.trim();
     const errorEl = document.getElementById('login-email-error');
     errorEl.hidden = true;
@@ -477,9 +477,15 @@
     } finally {
       btn.disabled = false;
     }
+  }
+  document.getElementById('login-send-otp').addEventListener('click', submitEmailStep);
+  ['login-email', 'login-fullname'].forEach((id) => {
+    document.getElementById(id).addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') submitEmailStep();
+    });
   });
 
-  document.getElementById('login-verify-otp').addEventListener('click', async () => {
+  async function submitOtpStep() {
     const code = document.getElementById('login-code').value.trim();
     const fullName = document.getElementById('login-fullname').value.trim();
     const errorEl = document.getElementById('login-otp-error');
@@ -506,6 +512,10 @@
     } finally {
       btn.disabled = false;
     }
+  }
+  document.getElementById('login-verify-otp').addEventListener('click', submitOtpStep);
+  document.getElementById('login-code').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') submitOtpStep();
   });
 
   document.getElementById('login-resend').addEventListener('click', async (e) => {
