@@ -7,6 +7,7 @@
   "somethingWentWrong": "Something went wrong.",
   "cancel": "Cancel",
   "submit": "Submit",
+  "retryButton": "Retry",
 
   "languagePickerTitle": "Choose your language",
   "languagePickerSubtitle": "You can change this later from the menu.",

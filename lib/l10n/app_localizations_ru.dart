@@ -25,6 +25,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get submit => 'Отправить';
 
   @override
+  String get retryButton => 'Повторить';
+
+  @override
   String get languagePickerTitle => 'Выберите язык';
 
   @override

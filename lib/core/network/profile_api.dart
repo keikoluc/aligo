@@ -32,6 +32,7 @@ class ProfileApi {
     if (response.statusCode < 200 || response.statusCode >= 300) {
       throw ApiException(
         body['error'] as String? ?? currentL10n.somethingWentWrong,
+        statusCode: response.statusCode,
       );
     }
     return body;

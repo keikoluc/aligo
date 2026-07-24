@@ -25,6 +25,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get submit => 'Submit';
 
   @override
+  String get retryButton => 'Retry';
+
+  @override
   String get languagePickerTitle => 'Choose your language';
 
   @override

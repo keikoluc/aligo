@@ -4,6 +4,7 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'core/config/app_config.dart';
 import 'core/current_locale.dart';
 import 'core/current_theme_mode.dart';
+import 'core/network/api_exception.dart';
 import 'core/network/profile_api.dart';
 import 'core/storage/locale_storage.dart';
 import 'core/storage/session_storage.dart';
@@ -16,6 +17,7 @@ import 'screens/home/home_screen.dart';
 import 'screens/language/language_picker_screen.dart';
 import 'screens/onboarding/role_select_screen.dart';
 import 'widgets/aligo_map_view.dart';
+import 'widgets/primary_button.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -119,17 +121,38 @@ class _AligoAppState extends State<AligoApp> {
     }
     if (token == null) return const LoginScreen();
 
-    try {
-      final UserModel user = await ProfileApi().getMe(token: token);
-      return user.role == null
-          ? RoleSelectScreen(token: token, user: user)
-          : HomeScreen(token: token, user: user);
-    } catch (_) {
-      // Expired/invalid token, or unreachable backend — fall back to a
-      // normal sign-in rather than getting stuck.
-      await _sessionStorage.clear();
-      return const LoginScreen();
+    // Only a backend-confirmed invalid/expired token (401) should sign
+    // the user out. Anything else — a flaky connection, or the backend
+    // free-tier instance still waking up right after the user just
+    // finished OTP verification — used to be treated the same way,
+    // silently discarding an otherwise valid session and bouncing a
+    // brand-new user straight back to the login screen. Retry those
+    // instead of giving up on the first hiccup.
+    const int maxAttempts = 3;
+    for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        final UserModel user = await ProfileApi().getMe(token: token);
+        return user.role == null
+            ? RoleSelectScreen(token: token, user: user)
+            : HomeScreen(token: token, user: user);
+      } catch (err) {
+        if (err is ApiException && err.statusCode == 401) {
+          await _sessionStorage.clear();
+          return const LoginScreen();
+        }
+        if (attempt == maxAttempts) {
+          return _SessionResumeErrorScreen(onRetry: _retryResumeSession);
+        }
+        await Future.delayed(Duration(seconds: attempt * 2));
+      }
     }
+    return const LoginScreen();
+  }
+
+  Future<void> _retryResumeSession() async {
+    final Widget home = await _resumeSession();
+    if (!mounted) return;
+    setState(() => _initialHome = home);
   }
 
   void _setLocale(Locale locale) {
@@ -156,6 +179,58 @@ class _AligoAppState extends State<AligoApp> {
       home: !_checkedStoredLocale
           ? const Scaffold(body: SizedBox.shrink())
           : _initialHome,
+    );
+  }
+}
+
+/// Shown when [_AligoAppState._resumeSession] can't confirm a stored
+/// session is actually invalid (vs. just unreachable) after retrying —
+/// keeps the token intact so the user can retry instead of being
+/// silently signed out.
+class _SessionResumeErrorScreen extends StatefulWidget {
+  final Future<void> Function() onRetry;
+
+  const _SessionResumeErrorScreen({required this.onRetry});
+
+  @override
+  State<_SessionResumeErrorScreen> createState() =>
+      _SessionResumeErrorScreenState();
+}
+
+class _SessionResumeErrorScreenState extends State<_SessionResumeErrorScreen> {
+  bool _isRetrying = false;
+
+  Future<void> _handleRetry() async {
+    setState(() => _isRetrying = true);
+    await widget.onRetry();
+    if (mounted) setState(() => _isRetrying = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.wifi_off_rounded, size: 48),
+                const SizedBox(height: AppSpacing.md),
+                Text(l10n.couldNotReachServer, textAlign: TextAlign.center),
+                const SizedBox(height: AppSpacing.lg),
+                PrimaryButton(
+                  label: l10n.retryButton,
+                  isLoading: _isRetrying,
+                  onPressed: _handleRetry,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

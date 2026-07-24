@@ -25,6 +25,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get submit => 'Yuborish';
 
   @override
+  String get retryButton => 'Qayta urinish';
+
+  @override
   String get languagePickerTitle => 'Tilni tanlang';
 
   @override

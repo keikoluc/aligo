@@ -130,6 +130,12 @@ abstract class AppLocalizations {
   /// **'Submit'**
   String get submit;
 
+  /// No description provided for @retryButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retryButton;
+
   /// No description provided for @languagePickerTitle.
   ///
   /// In en, this message translates to:
